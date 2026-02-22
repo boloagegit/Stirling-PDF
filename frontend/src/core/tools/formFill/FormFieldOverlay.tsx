@@ -605,7 +605,7 @@ export function FormFieldOverlay({
   pageHeight,
   fileId,
 }: FormFieldOverlayProps) {
-  const { setValue, setActiveField, fieldsByPage, state, forFileId } =
+  const { setValue, setActiveField, fieldsByPage, state, forFileId, mode } =
     useFormFill();
   const { activeFieldName, validationErrors } = state;
   const { printActions, scrollActions, exportActions } = useViewer();
@@ -747,6 +747,9 @@ export function FormFieldOverlay({
 
   if (pageFields.length === 0) return null;
 
+  // In modify or create mode, the edit/creation overlays handle interactions instead
+  const isEditMode = state.fields.length > 0 && (mode === 'modify' || mode === 'make');
+
   return (
     <div
       style={{
@@ -760,7 +763,8 @@ export function FormFieldOverlay({
       }}
       data-form-overlay-page={pageIndex}
     >
-      {pageFields.map((field: FormField) =>
+      {/* In edit modes, don't render interactive widgets — the edit/creation overlays handle that */}
+      {!isEditMode && pageFields.map((field: FormField) =>
         (field.widgets || [])
           .filter((w: WidgetCoordinates) => w.pageIndex === pageIndex)
           .map((widget: WidgetCoordinates, widgetIdx: number) => {
