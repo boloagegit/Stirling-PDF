@@ -100,7 +100,6 @@ const MODE_TABS: ModeTabDef[] = [
     ready: true,
   },
 ];
-];
 
 // ---------------------------------------------------------------------------
 // Coming-soon placeholder for unimplemented tabs

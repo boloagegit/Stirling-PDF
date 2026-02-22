@@ -2432,6 +2432,8 @@ public class FormUtils {
         }
         widget.setRectangle(validRectangle);
         widget.setPage(page);
+        // Explicitly set /P entry in COS dictionary for proper page reference persistence
+        widget.getCOSObject().setItem(COSName.P, page.getCOSObject());
 
         if (existingWidget == null) {
             widget.setPrinted(true);
@@ -2452,8 +2454,10 @@ public class FormUtils {
 
         List<PDAnnotation> annotations = page.getAnnotations();
         if (annotations == null) {
-            page.getAnnotations().add(widget);
-        } else if (!annotations.contains(widget)) {
+            annotations = new ArrayList<>();
+            page.setAnnotations(annotations);
+        }
+        if (!annotations.contains(widget)) {
             annotations.add(widget);
         }
         acroForm.getFields().add(field);
