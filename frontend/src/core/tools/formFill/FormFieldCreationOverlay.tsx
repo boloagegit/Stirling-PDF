@@ -8,18 +8,18 @@
  * - Converts CSS coordinates to PDF coordinates on completion
  * - Snaps to nearby field edges with visual guide lines
  */
-import React, { useCallback, useRef, useMemo, useEffect, useState } from 'react';
-import { useDocumentState } from '@embedpdf/core/react';
-import { useFormFill } from '@app/tools/formFill/FormFillContext';
-import { cssToPdfRect, pixelsToPdfPoints } from '@app/tools/formFill/formCoordinateUtils';
-import { FIELD_TYPE_ICON, FIELD_TYPE_COLOR } from '@app/tools/formFill/fieldMeta';
+import React, { useCallback, useRef, useMemo, useEffect, useState } from "react";
+import { useDocumentState } from "@embedpdf/core/react";
+import { useFormFill } from "@app/tools/formFill/FormFillContext";
+import { cssToPdfRect, pixelsToPdfPoints } from "@app/tools/formFill/formCoordinateUtils";
+import { FIELD_TYPE_ICON, FIELD_TYPE_COLOR } from "@app/tools/formFill/fieldMeta";
 import {
   collectSnapTargets,
   collectPendingFieldSnapTargets,
   snapRect,
   type SnapGuide,
-} from '@app/tools/formFill/formSnapUtils';
-import type { NewFieldDefinition } from '@app/tools/formFill/types';
+} from "@app/tools/formFill/formSnapUtils";
+import type { NewFieldDefinition } from "@app/tools/formFill/types";
 
 const MIN_SIZE_PTS = 10;
 
@@ -58,7 +58,7 @@ export function FormFieldCreationOverlay({
     const firstWidget = allFields
       .find(f => f.widgets?.some(w => w.pageIndex === pageIndex))
       ?.widgets?.find(w => w.pageIndex === pageIndex);
-    const cbHeight = firstWidget?.cropBoxHeight;
+    const cbHeight = (firstWidget?.cropBoxHeight != null && firstWidget.cropBoxHeight > 0) ? firstWidget.cropBoxHeight : undefined;
     return {
       scaleX: pageWidth / pdfPage.size.width,
       scaleY: pageHeight / pdfPage.size.height,
@@ -194,9 +194,9 @@ export function FormFieldCreationOverlay({
 
   // Escape to cancel placement
   useEffect(() => {
-    if (mode !== 'make') return;
+    if (mode !== "make") return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         if (creationState.placingFieldType) {
           setPlacingFieldType(null);
           setCreationDragRect(null);
@@ -205,12 +205,12 @@ export function FormFieldCreationOverlay({
         }
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [mode, creationState.placingFieldType, setPlacingFieldType, setCreationDragRect]);
 
   // Don't render if not in create mode
-  if (mode !== 'make') return null;
+  if (mode !== "make") return null;
 
   const isPlacing = !!creationState.placingFieldType;
   const dragRect = creationState.dragRect;
@@ -223,14 +223,14 @@ export function FormFieldCreationOverlay({
     <div
       ref={overlayRef}
       style={{
-        position: 'absolute',
+        position: "absolute",
         top: 0,
         left: 0,
-        width: '100%',
-        height: '100%',
+        width: "100%",
+        height: "100%",
         zIndex: 15,
-        cursor: isPlacing ? 'crosshair' : 'default',
-        pointerEvents: isPlacing ? 'auto' : 'none',
+        cursor: isPlacing ? "crosshair" : "default",
+        pointerEvents: isPlacing ? "auto" : "none",
       }}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
@@ -238,17 +238,17 @@ export function FormFieldCreationOverlay({
     >
       {/* Snap guide lines */}
       {snapGuides.map((guide, i) =>
-        guide.axis === 'x' ? (
+        guide.axis === "x" ? (
           <div
             key={`guide-${i}`}
             style={{
-              position: 'absolute',
+              position: "absolute",
               left: guide.position,
               top: 0,
               width: 0,
-              height: '100%',
-              borderLeft: '1px dashed rgba(255, 0, 100, 0.6)',
-              pointerEvents: 'none',
+              height: "100%",
+              borderLeft: "1px dashed rgba(255, 0, 100, 0.6)",
+              pointerEvents: "none",
               zIndex: 20,
             }}
           />
@@ -256,13 +256,13 @@ export function FormFieldCreationOverlay({
           <div
             key={`guide-${i}`}
             style={{
-              position: 'absolute',
+              position: "absolute",
               left: 0,
               top: guide.position,
-              width: '100%',
+              width: "100%",
               height: 0,
-              borderTop: '1px dashed rgba(255, 0, 100, 0.6)',
-              pointerEvents: 'none',
+              borderTop: "1px dashed rgba(255, 0, 100, 0.6)",
+              pointerEvents: "none",
               zIndex: 20,
             }}
           />
@@ -273,15 +273,15 @@ export function FormFieldCreationOverlay({
       {showDragRect && dragRect.width > 0 && dragRect.height > 0 && (
         <div
           style={{
-            position: 'absolute',
+            position: "absolute",
             left: dragRect.x,
             top: dragRect.y,
             width: dragRect.width,
             height: dragRect.height,
-            border: '2px dashed var(--mantine-color-blue-5)',
-            background: 'rgba(33, 150, 243, 0.1)',
+            border: "2px dashed var(--mantine-color-blue-5)",
+            background: "rgba(33, 150, 243, 0.1)",
             borderRadius: 2,
-            pointerEvents: 'none',
+            pointerEvents: "none",
           }}
         />
       )}
@@ -300,7 +300,7 @@ export function FormFieldCreationOverlay({
           <div
             key={`pending-${idx}`}
             style={{
-              position: 'absolute',
+              position: "absolute",
               left,
               top,
               width,
@@ -308,14 +308,14 @@ export function FormFieldCreationOverlay({
               border: `2px dashed ${color}`,
               background: `var(--mantine-color-${FIELD_TYPE_COLOR[field.type]}-light)`,
               borderRadius: 2,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              pointerEvents: 'none',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              pointerEvents: "none",
               opacity: 0.8,
             }}
           >
-            <span style={{ fontSize: Math.min(height * 0.6, 18), color, lineHeight: 1, display: 'flex' }}>
+            <span style={{ fontSize: Math.min(height * 0.6, 18), color, lineHeight: 1, display: "flex" }}>
               {FIELD_TYPE_ICON[field.type]}
             </span>
           </div>

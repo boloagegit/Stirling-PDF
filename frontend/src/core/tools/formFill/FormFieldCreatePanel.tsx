@@ -6,7 +6,7 @@
  * - Pending fields list with property editing
  * - "Add Fields to PDF" commit button
  */
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from "react";
 import {
   Button,
   Text,
@@ -17,28 +17,30 @@ import {
   UnstyledButton,
   Collapse,
   Loader,
-} from '@mantine/core';
-import SaveIcon from '@mui/icons-material/Save';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import { useFormFill } from '@app/tools/formFill/FormFillContext';
-import { useFileState } from '@app/contexts/FileContext';
-import { isStirlingFile } from '@app/types/fileContext';
-import { FIELD_TYPE_ICON, FIELD_TYPE_COLOR } from '@app/tools/formFill/fieldMeta';
-import { FormFieldPropertyEditor } from '@app/tools/formFill/FormFieldPropertyEditor';
-import type { FormFieldType } from '@app/tools/formFill/types';
-import styles from '@app/tools/formFill/FormFill.module.css';
+} from "@mantine/core";
+import { useTranslation } from "react-i18next";
+import SaveIcon from "@mui/icons-material/Save";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import { useFormFill } from "@app/tools/formFill/FormFillContext";
+import { useFileState } from "@app/contexts/FileContext";
+import { isStirlingFile } from "@app/types/fileContext";
+import { FIELD_TYPE_ICON, FIELD_TYPE_COLOR } from "@app/tools/formFill/fieldMeta";
+import { FormFieldPropertyEditor } from "@app/tools/formFill/FormFieldPropertyEditor";
+import type { FormFieldType } from "@app/tools/formFill/types";
+import styles from "@app/tools/formFill/FormFill.module.css";
 
 const CREATABLE_TYPES: { type: FormFieldType; label: string }[] = [
-  { type: 'text', label: 'Text' },
-  { type: 'checkbox', label: 'Checkbox' },
-  { type: 'combobox', label: 'Dropdown' },
-  { type: 'listbox', label: 'List' },
+  { type: "text", label: "Text" },
+  { type: "checkbox", label: "Checkbox" },
+  { type: "combobox", label: "Dropdown" },
+  { type: "listbox", label: "List" },
 ];
 
 export function FormFieldCreatePanel() {
+  const { t } = useTranslation();
   const {
     creationState,
     setPlacingFieldType,
@@ -75,12 +77,12 @@ export function FormFieldCreatePanel() {
     try {
       const blob = await commitNewFields(currentFile);
       // Apply the result to the viewer via custom event (same pattern as FormFill save)
-      const event = new CustomEvent('formfill:apply', { detail: { blob } });
+      const event = new CustomEvent("formfill:apply", { detail: { blob } });
       window.dispatchEvent(event);
       // Re-fetch fields to pick up the new ones
       fetchFields(currentFile, currentFile.fileId);
     } catch (err: any) {
-      setError(err?.message || 'Failed to add fields');
+      setError(err?.message || t("formFill.createMode.addFailed", "Failed to add fields"));
     } finally {
       setCommitting(false);
     }
@@ -91,10 +93,10 @@ export function FormFieldCreatePanel() {
   return (
     <div className={styles.root}>
       <div className={styles.header}>
-        <Text size="xs" fw={600}>Select a field type, then drag on the PDF to place it.</Text>
+        <Text size="xs" fw={600}>{t("formFill.createMode.instruction", "Select a field type, then drag on the PDF to place it.")}</Text>
 
         {/* Field type palette */}
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
           {CREATABLE_TYPES.map(({ type, label }) => {
             const isActive = placingFieldType === type;
             return (
@@ -102,23 +104,23 @@ export function FormFieldCreatePanel() {
                 <UnstyledButton
                   onClick={() => setPlacingFieldType(isActive ? null : type)}
                   style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
                     gap: 2,
-                    padding: '6px 10px',
-                    borderRadius: 'var(--radius-sm)',
-                    border: `1.5px solid ${isActive ? `var(--mantine-color-${FIELD_TYPE_COLOR[type]}-5)` : 'var(--border-default, var(--mantine-color-default-border))'}`,
-                    background: isActive ? `var(--mantine-color-${FIELD_TYPE_COLOR[type]}-light)` : 'transparent',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease',
+                    padding: "6px 10px",
+                    borderRadius: "var(--radius-sm)",
+                    border: `1.5px solid ${isActive ? `var(--mantine-color-${FIELD_TYPE_COLOR[type]}-5)` : "var(--border-default, var(--mantine-color-default-border))"}`,
+                    background: isActive ? `var(--mantine-color-${FIELD_TYPE_COLOR[type]}-light)` : "transparent",
+                    cursor: "pointer",
+                    transition: "all 0.15s ease",
                     minWidth: 52,
                   }}
                 >
-                  <span style={{ fontSize: '1.125rem', color: `var(--mantine-color-${FIELD_TYPE_COLOR[type]}-6)`, lineHeight: 1, display: 'flex' }}>
+                  <span style={{ fontSize: "1.125rem", color: `var(--mantine-color-${FIELD_TYPE_COLOR[type]}-6)`, lineHeight: 1, display: "flex" }}>
                     {FIELD_TYPE_ICON[type]}
                   </span>
-                  <Text size="xs" fw={600} style={{ fontSize: '0.625rem', textTransform: 'uppercase' }}>
+                  <Text size="xs" fw={600} style={{ fontSize: "0.625rem", textTransform: "uppercase" }}>
                     {label}
                   </Text>
                 </UnstyledButton>
@@ -135,7 +137,7 @@ export function FormFieldCreatePanel() {
             loading={committing}
             fullWidth
           >
-            Add {pendingFields.length} Field{pendingFields.length !== 1 ? 's' : ''} to PDF
+            {t("formFill.createMode.addButton", "Add {{count}} Field(s) to PDF", { count: pendingFields.length })}
           </Button>
         )}
 
@@ -150,9 +152,9 @@ export function FormFieldCreatePanel() {
       <ScrollArea className={styles.fieldList}>
         <div className={styles.fieldListInner}>
           {pendingFields.length === 0 && (
-            <div className={styles.emptyState} style={{ padding: '2rem 1rem' }}>
+            <div className={styles.emptyState} style={{ padding: "2rem 1rem" }}>
               <Text size="xs" c="dimmed" ta="center">
-                No pending fields. Select a type above and drag on the PDF to create one.
+                {t("formFill.createMode.emptyState", "No pending fields. Select a type above and drag on the PDF to create one.")}
               </Text>
             </div>
           )}
@@ -160,14 +162,14 @@ export function FormFieldCreatePanel() {
           {pendingFields.map((field, idx) => (
             <div key={idx} className={styles.fieldCard}>
               <div
-                style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}
+                style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}
                 onClick={() => setExpandedIdx(expandedIdx === idx ? null : idx)}
               >
-                <span style={{ fontSize: '0.875rem', color: `var(--mantine-color-${FIELD_TYPE_COLOR[field.type]}-6)`, display: 'flex' }}>
+                <span style={{ fontSize: "0.875rem", color: `var(--mantine-color-${FIELD_TYPE_COLOR[field.type]}-6)`, display: "flex" }}>
                   {FIELD_TYPE_ICON[field.type]}
                 </span>
                 <Text size="xs" fw={600} style={{ flex: 1 }}>
-                  {field.name || `New ${field.type}`}
+                  {field.name || t("formFill.createMode.newField", "New {{type}}", { type: field.type })}
                 </Text>
                 <Text size="xs" c="dimmed">p.{field.pageIndex + 1}</Text>
                 <ActionIcon variant="subtle" color="red" size="sm" onClick={(e) => { e.stopPropagation(); removePendingField(idx); }}>

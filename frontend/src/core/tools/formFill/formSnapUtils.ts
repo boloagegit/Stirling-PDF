@@ -5,12 +5,12 @@
  * all OTHER fields on the same page. If a candidate is within SNAP_THRESHOLD_PX
  * pixels of a target edge, it snaps to that edge.
  */
-import type { FormField, ModifyFieldDefinition } from '@app/tools/formFill/types';
-import { pdfToCssRect } from '@app/tools/formFill/formCoordinateUtils';
+import type { FormField, ModifyFieldDefinition } from "@app/tools/formFill/types";
+import { pdfToCssRect } from "@app/tools/formFill/formCoordinateUtils";
 
 const SNAP_THRESHOLD_PX = 6;
 
-export type SnapAxis = 'x' | 'y';
+export type SnapAxis = "x" | "y";
 
 export interface SnapResult {
   value: number;
@@ -184,7 +184,7 @@ export function snapRect(
   if (xCandidates.length > 0) {
     xCandidates.sort((a, b) => a.dist - b.dist);
     newLeft = left + xCandidates[0].offset;
-    guides.push({ axis: 'x', position: xCandidates[0].pos });
+    guides.push({ axis: "x", position: xCandidates[0].pos });
   }
 
   // --- Y axis: pick best of top / bottom / centerY ---
@@ -202,7 +202,7 @@ export function snapRect(
   if (yCandidates.length > 0) {
     yCandidates.sort((a, b) => a.dist - b.dist);
     newTop = top + yCandidates[0].offset;
-    guides.push({ axis: 'y', position: yCandidates[0].pos });
+    guides.push({ axis: "y", position: yCandidates[0].pos });
   }
 
   return { left: newLeft, top: newTop, guides };
@@ -250,7 +250,7 @@ export function snapRectResize(
       const delta = s.value - left;
       newLeft = s.value;
       newWidth = width - delta;
-      guides.push({ axis: 'x', position: s.value });
+      guides.push({ axis: "x", position: s.value });
     }
   }
   if (edges.right) {
@@ -258,7 +258,7 @@ export function snapRectResize(
     const s = applySnap(right, xTargets, threshold);
     if (s.didSnap) {
       newWidth = s.value - newLeft;
-      guides.push({ axis: 'x', position: s.value });
+      guides.push({ axis: "x", position: s.value });
     }
   }
 
@@ -269,7 +269,7 @@ export function snapRectResize(
       const delta = s.value - top;
       newTop = s.value;
       newHeight = height - delta;
-      guides.push({ axis: 'y', position: s.value });
+      guides.push({ axis: "y", position: s.value });
     }
   }
   if (edges.bottom) {
@@ -277,7 +277,7 @@ export function snapRectResize(
     const s = applySnap(bottom, yTargets, threshold);
     if (s.didSnap) {
       newHeight = s.value - newTop;
-      guides.push({ axis: 'y', position: s.value });
+      guides.push({ axis: "y", position: s.value });
     }
   }
 

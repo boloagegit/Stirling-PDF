@@ -4,25 +4,27 @@
  * Shows existing fields, allows selecting one for coordinate editing
  * via the overlay, and batches all modifications into one backend call.
  */
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from "react";
 import {
   Button,
   Text,
   ScrollArea,
   Alert,
   Loader,
-} from '@mantine/core';
-import SaveIcon from '@mui/icons-material/Save';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import { useFormFill } from '@app/tools/formFill/FormFillContext';
-import { useFileState } from '@app/contexts/FileContext';
-import { isStirlingFile } from '@app/types/fileContext';
-import { FIELD_TYPE_ICON, FIELD_TYPE_COLOR } from '@app/tools/formFill/fieldMeta';
-import { FormFieldPropertyEditor } from '@app/tools/formFill/FormFieldPropertyEditor';
-import type { NewFieldDefinition, FormField } from '@app/tools/formFill/types';
-import styles from '@app/tools/formFill/FormFill.module.css';
+} from "@mantine/core";
+import SaveIcon from "@mui/icons-material/Save";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import { useTranslation } from "react-i18next";
+import { useFormFill } from "@app/tools/formFill/FormFillContext";
+import { useFileState } from "@app/contexts/FileContext";
+import { isStirlingFile } from "@app/types/fileContext";
+import { FIELD_TYPE_ICON, FIELD_TYPE_COLOR } from "@app/tools/formFill/fieldMeta";
+import { FormFieldPropertyEditor } from "@app/tools/formFill/FormFieldPropertyEditor";
+import type { NewFieldDefinition, FormField } from "@app/tools/formFill/types";
+import styles from "@app/tools/formFill/FormFill.module.css";
 
 export function FormFieldModifyPanel() {
+  const { t } = useTranslation();
   const {
     state: formState,
     editState,
@@ -59,11 +61,11 @@ export function FormFieldModifyPanel() {
     setError(null);
     try {
       const blob = await commitFieldModifications(currentFile);
-      const event = new CustomEvent('formfill:apply', { detail: { blob } });
+      const event = new CustomEvent("formfill:apply", { detail: { blob } });
       window.dispatchEvent(event);
       fetchFields(currentFile, currentFile.fileId);
     } catch (err: any) {
-      setError(err?.message || 'Failed to save modifications');
+      setError(err?.message || t("formFill.modifyMode.saveFailed", "Failed to save modifications"));
     } finally {
       setCommitting(false);
     }
@@ -72,7 +74,7 @@ export function FormFieldModifyPanel() {
   const handleSelectField = useCallback((fieldName: string) => {
     setEditState({
       selectedFieldName: editState.selectedFieldName === fieldName ? null : fieldName,
-      interaction: 'idle',
+      interaction: "idle",
       pendingRect: null,
     });
   }, [editState.selectedFieldName, setEditState]);
@@ -92,7 +94,7 @@ export function FormFieldModifyPanel() {
     // Coords: modifiedFields stores PDF BL origin. Widget coords are CSS TL (y-flipped).
     // Convert widget CSS TL → PDF BL for display consistency when no pending modification.
     const cropH = widget?.cropBoxHeight ?? 0;
-    const widgetPdfY = cropH > 0 && widget
+    const widgetPdfY = cropH != null && cropH > 0 && widget
       ? cropH - widget.y - widget.height
       : widget?.y ?? 0;
     const x = pending.x ?? widget?.x ?? 0;
@@ -102,7 +104,7 @@ export function FormFieldModifyPanel() {
     return {
       name: pending.name ?? selectedField.name,
       label: pending.label ?? selectedField.label ?? undefined,
-      type: (pending.type ?? selectedField.type) as NewFieldDefinition['type'],
+      type: (pending.type ?? selectedField.type) as NewFieldDefinition["type"],
       pageIndex: widget?.pageIndex ?? 0,
       x,
       y,
@@ -123,9 +125,9 @@ export function FormFieldModifyPanel() {
     if (!selectedField) return;
     const props: Record<string, unknown> = {};
     if (updated.name !== selectedField.name) props.name = updated.name;
-    if (updated.label !== (selectedField.label ?? undefined)) props.label = updated.label ?? '';
-    if (updated.tooltip !== (selectedField.tooltip ?? undefined)) props.tooltip = updated.tooltip ?? '';
-    if (updated.defaultValue !== (selectedField.value ?? undefined)) props.defaultValue = updated.defaultValue ?? '';
+    if (updated.label !== (selectedField.label ?? undefined)) props.label = updated.label ?? "";
+    if (updated.tooltip !== (selectedField.tooltip ?? undefined)) props.tooltip = updated.tooltip ?? "";
+    if (updated.defaultValue !== (selectedField.value ?? undefined)) props.defaultValue = updated.defaultValue ?? "";
     if (updated.required !== selectedField.required) props.required = updated.required;
     if (updated.readOnly !== selectedField.readOnly) props.readOnly = updated.readOnly;
     if (updated.multiline !== selectedField.multiline) props.multiline = updated.multiline;
@@ -163,7 +165,7 @@ export function FormFieldModifyPanel() {
     <div className={styles.root}>
       <div className={styles.header}>
         <Text size="xs" fw={600}>
-          Click a field below or on the PDF to select it. Drag to move, use handles to resize.
+          {t("formFill.modifyMode.instruction", "Click a field below or on the PDF to select it. Drag to move, use handles to resize.")}
         </Text>
 
         {modifiedFields.size > 0 && (
@@ -174,7 +176,7 @@ export function FormFieldModifyPanel() {
             loading={committing}
             fullWidth
           >
-            Save {modifiedFields.size} Change{modifiedFields.size !== 1 ? 's' : ''}
+            {t("formFill.modifyMode.saveButton", "Save {{count}} Change(s)", { count: modifiedFields.size })}
           </Button>
         )}
 
@@ -188,16 +190,16 @@ export function FormFieldModifyPanel() {
       <ScrollArea className={styles.fieldList}>
         <div className={styles.fieldListInner}>
           {formState.loading && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '1rem' }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "1rem" }}>
               <Loader size={14} />
-              <Text size="xs" c="dimmed">Loading fields...</Text>
+              <Text size="xs" c="dimmed">{t("formFill.modifyMode.loading", "Loading fields...")}</Text>
             </div>
           )}
 
           {!formState.loading && fields.length === 0 && (
-            <div className={styles.emptyState} style={{ padding: '2rem 1rem' }}>
+            <div className={styles.emptyState} style={{ padding: "2rem 1rem" }}>
               <Text size="xs" c="dimmed" ta="center">
-                No form fields found. Use Create mode to add fields first.
+                {t("formFill.modifyMode.emptyState", "No form fields found. Use Create mode to add fields first.")}
               </Text>
             </div>
           )}
@@ -209,7 +211,7 @@ export function FormFieldModifyPanel() {
                 style={i === 0 ? { marginTop: 0 } : undefined}
               >
                 <Text className={styles.pageDividerLabel}>
-                  Page {pageIdx + 1}
+                  {t("formFill.common.page", "Page {{page}}", { page: pageIdx + 1 })}
                 </Text>
               </div>
 
@@ -222,7 +224,7 @@ export function FormFieldModifyPanel() {
                 return (
                   <div
                     key={field.name}
-                    className={`${styles.fieldCard} ${isSelected ? styles.fieldCardActive : ''}`}
+                    className={`${styles.fieldCard} ${isSelected ? styles.fieldCardActive : ""}`}
                     onClick={() => handleSelectField(field.name)}
                   >
                     <div className={styles.fieldHeader}>
@@ -230,7 +232,7 @@ export function FormFieldModifyPanel() {
                         className={styles.fieldTypeIcon}
                         style={{
                           color: `var(--mantine-color-${FIELD_TYPE_COLOR[field.type]}-6)`,
-                          fontSize: '0.875rem',
+                          fontSize: "0.875rem",
                         }}
                       >
                         {FIELD_TYPE_ICON[field.type]}
@@ -240,21 +242,21 @@ export function FormFieldModifyPanel() {
                       </span>
                       {isModified && (
                         <span style={{
-                          fontSize: '0.5625rem',
-                          padding: '0.0625rem 0.375rem',
-                          borderRadius: 'var(--radius-xs)',
-                          background: 'var(--mantine-color-yellow-light)',
-                          color: 'var(--mantine-color-yellow-light-color)',
+                          fontSize: "0.5625rem",
+                          padding: "0.0625rem 0.375rem",
+                          borderRadius: "var(--radius-xs)",
+                          background: "var(--mantine-color-yellow-light)",
+                          color: "var(--mantine-color-yellow-light-color)",
                           fontWeight: 800,
-                          textTransform: 'uppercase',
+                          textTransform: "uppercase",
                         }}>
-                          modified
+                          {t("formFill.modifyMode.modifiedBadge", "modified")}
                         </span>
                       )}
                     </div>
 
                     {!isSelected && widget && (
-                      <Text size="xs" c="dimmed" style={{ fontSize: '0.625rem' }}>
+                      <Text size="xs" c="dimmed" style={{ fontSize: "0.625rem" }}>
                         {coords && coords.x != null && coords.y != null && coords.width != null && coords.height != null
                           ? `(${Math.round(coords.x)}, ${Math.round(coords.y)}) ${Math.round(coords.width)}×${Math.round(coords.height)} pt`
                           : `(${Math.round(widget.x)}, ${Math.round(widget.y)}) ${Math.round(widget.width)}×${Math.round(widget.height)} pt`
@@ -265,7 +267,7 @@ export function FormFieldModifyPanel() {
                     {/* Inline property editor for the selected field */}
                     {isSelected && selectedFieldEditorData && (
                       <div
-                        style={{ borderTop: '1px solid var(--mantine-color-default-border)', marginTop: '0.375rem', paddingTop: '0.375rem' }}
+                        style={{ borderTop: "1px solid var(--mantine-color-default-border)", marginTop: "0.375rem", paddingTop: "0.375rem" }}
                         onClick={(e) => e.stopPropagation()}
                       >
                         <FormFieldPropertyEditor
@@ -290,7 +292,7 @@ export function FormFieldModifyPanel() {
         <div className={styles.statusBar}>
           <span>
             <span className={styles.unsavedDot} />
-            {modifiedFields.size} unsaved change{modifiedFields.size !== 1 ? 's' : ''}
+            {t("formFill.modifyMode.unsavedChanges", "{{count}} unsaved change(s)", { count: modifiedFields.size })}
           </span>
         </div>
       )}

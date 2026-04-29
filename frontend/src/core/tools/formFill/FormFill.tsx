@@ -33,6 +33,7 @@ import {
   useAllFormValues,
 } from "@app/tools/formFill/FormFillContext";
 import { useNavigation } from "@app/contexts/NavigationContext";
+import { useTranslation } from "react-i18next";
 import { useViewer } from "@app/contexts/ViewerContext";
 import { useFileState } from "@app/contexts/FileContext";
 import { Skeleton } from "@mantine/core";
@@ -77,25 +78,25 @@ interface ModeTabDef {
 const MODE_TABS: ModeTabDef[] = [
   {
     id: "fill",
-    label: "Fill",
+    label: "fill",
     icon: <EditNoteIcon className={styles.modeTabIcon} />,
     ready: true,
   },
   {
     id: "make",
-    label: "Create",
+    label: "create",
     icon: <PostAddIcon className={styles.modeTabIcon} />,
     ready: true,
   },
   {
     id: "batch",
-    label: "Batch",
+    label: "batch",
     icon: <FileCopyIcon className={styles.modeTabIcon} />,
     ready: false,
   },
   {
     id: "modify",
-    label: "Modify",
+    label: "modify",
     icon: <BuildCircleIcon className={styles.modeTabIcon} />,
     ready: true,
   },
@@ -123,6 +124,7 @@ const MODE_TABS: ModeTabDef[] = [
 // ---------------------------------------------------------------------------
 
 const FormFill = (_props: BaseToolProps) => {
+  const { t } = useTranslation();
   const { selectedTool } = useNavigation();
   const { selectors, state: fileState } = useFileState();
 
@@ -391,7 +393,7 @@ const FormFill = (_props: BaseToolProps) => {
             label: (
               <div className={styles.segmentedLabel}>
                 {tab.icon}
-                <span>{tab.label}</span>
+                <span>{t(`formFill.tabs.${tab.label}`, tab.label)}</span>
               </div>
             ),
           }))}
@@ -592,7 +594,7 @@ const FormFill = (_props: BaseToolProps) => {
                       style={i === 0 ? { marginTop: 0 } : undefined}
                     >
                       <Text className={styles.pageDividerLabel}>
-                        Page {pageIdx + 1}
+                        {t("formFill.common.page", "Page {{page}}", { page: pageIdx + 1 })}
                       </Text>
                     </div>
 

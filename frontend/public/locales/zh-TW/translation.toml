@@ -4158,6 +4158,66 @@ title = "平坦化"
 desc = "使用視覺化編輯器互動式填寫 PDF 表單欄位"
 title = "填寫表單"
 
+[formFill.tabs]
+fill = "填寫"
+create = "建立"
+batch = "批次"
+modify = "修改"
+
+[formFill.createMode]
+title = "建立欄位"
+instruction = "選擇欄位類型，然後在 PDF 上拖曳以放置。"
+addButton = "新增 {count} 個欄位至 PDF"
+emptyState = "尚無待新增欄位。請先選擇上方的類型，然後在 PDF 上拖曳建立。"
+addFailed = "新增欄位失敗"
+newField = "新 {type}"
+
+[formFill.modifyMode]
+title = "修改欄位"
+instruction = "點擊下方列表或 PDF 上的欄位以選取。拖曳可移動，拖曳控制點可調整大小。"
+saveButton = "儲存 {count} 項變更"
+emptyState = "找不到表單欄位。請先使用「建立」模式新增欄位。"
+modifiedBadge = "已修改"
+loading = "載入欄位中..."
+unsavedChanges = "{count} 項未儲存的變更"
+saveFailed = "儲存修改失敗"
+
+[formFill.fieldTypes]
+text = "文字欄位"
+checkbox = "核取方塊"
+dropdown = "下拉選單"
+listbox = "列表方塊"
+
+[formFill.propertyEditor]
+name = "名稱"
+label = "標籤"
+type = "類型"
+tooltip = "提示文字"
+defaultValue = "預設值"
+required = "必填"
+readOnly = "唯讀"
+multiline = "多行"
+fontSize = "字型大小 (pt)"
+options = "選項"
+addOption = "新增選項"
+multiSelect = "多選"
+position = "位置"
+positionAndSize = "位置與大小 (PDF 點)"
+fieldProperties = "欄位屬性"
+fieldNamePlaceholder = "欄位名稱"
+displayLabelPlaceholder = "顯示標籤"
+helpTextPlaceholder = "說明文字"
+defaultValuePlaceholder = "預設值"
+fontSizePlaceholder = "12（預設）"
+optionPlaceholder = "選項 {num}"
+x = "X"
+y = "Y"
+width = "寬度"
+height = "高度"
+
+[formFill.common]
+page = "第 {page} 頁"
+
 [home.getPdfInfo]
 desc = "取得 PDF 的所有可能資訊"
 tags = "資訊,中繼資料,詳細,info,metadata,details,PDF info,document info,properties,file info,get info,show info,view properties,document properties,statistics,page count,file details,inspect"

@@ -4051,11 +4051,19 @@ title = "Automate"
 desc = "Fill PDF form fields interactively with a visual editor"
 title = "Fill Form"
 
+[formFill.tabs]
+fill = "Fill"
+create = "Create"
+batch = "Batch"
+modify = "Modify"
+
 [formFill.createMode]
 title = "Create Fields"
 instruction = "Select a field type, then drag on the PDF to place it."
 addButton = "Add {count} Field(s) to PDF"
 emptyState = "No pending fields. Select a type above and drag on the PDF to create one."
+addFailed = "Failed to add fields"
+newField = "New {type}"
 
 [formFill.modifyMode]
 title = "Modify Fields"
@@ -4063,6 +4071,15 @@ instruction = "Click a field below or on the PDF to select it. Drag to move, use
 saveButton = "Save {count} Change(s)"
 emptyState = "No form fields found. Use Create mode to add fields first."
 modifiedBadge = "modified"
+loading = "Loading fields..."
+unsavedChanges = "{count} unsaved change(s)"
+saveFailed = "Failed to save modifications"
+
+[formFill.fieldTypes]
+text = "Text Field"
+checkbox = "Checkbox"
+dropdown = "Dropdown"
+listbox = "List Box"
 
 [formFill.propertyEditor]
 name = "Name"
@@ -4080,6 +4097,19 @@ multiSelect = "Multi-select"
 position = "Position"
 positionAndSize = "Position & Size (PDF points)"
 fieldProperties = "Field Properties"
+fieldNamePlaceholder = "Field name"
+displayLabelPlaceholder = "Display label"
+helpTextPlaceholder = "Help text"
+defaultValuePlaceholder = "Default value"
+fontSizePlaceholder = "12 (default)"
+optionPlaceholder = "Option {num}"
+x = "X"
+y = "Y"
+width = "Width"
+height = "Height"
+
+[formFill.common]
+page = "Page {page}"
 
 [home.autoRename]
 desc = "Auto renames a PDF file based on its detected header"

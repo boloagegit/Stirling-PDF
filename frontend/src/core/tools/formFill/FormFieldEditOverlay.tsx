@@ -7,13 +7,13 @@
  * - Updates modifiedFields in context on completion
  * - Snaps to nearby field edges with visual guide lines
  */
-import React, { useCallback, useRef, useMemo, useEffect, useState } from 'react';
-import { useDocumentState } from '@embedpdf/core/react';
-import { useFormFill } from '@app/tools/formFill/FormFillContext';
-import { cssToPdfRect, pdfToCssRect } from '@app/tools/formFill/formCoordinateUtils';
-import { FIELD_TYPE_COLOR } from '@app/tools/formFill/fieldMeta';
-import { collectSnapTargets, snapRect, snapRectResize, type SnapGuide, type ResizeEdges } from '@app/tools/formFill/formSnapUtils';
-import type { FormField, WidgetCoordinates } from '@app/tools/formFill/types';
+import React, { useCallback, useRef, useMemo, useEffect, useState } from "react";
+import { useDocumentState } from "@embedpdf/core/react";
+import { useFormFill } from "@app/tools/formFill/FormFillContext";
+import { cssToPdfRect, pdfToCssRect } from "@app/tools/formFill/formCoordinateUtils";
+import { FIELD_TYPE_COLOR } from "@app/tools/formFill/fieldMeta";
+import { collectSnapTargets, snapRect, snapRectResize, type SnapGuide, type ResizeEdges } from "@app/tools/formFill/formSnapUtils";
+import type { FormField, WidgetCoordinates } from "@app/tools/formFill/types";
 
 const MIN_SIZE_PX = 8;
 const HANDLE_SIZE = 8;
@@ -25,10 +25,10 @@ interface FormFieldEditOverlayProps {
   pageHeight: number;
 }
 
-type HandlePosition = 'nw' | 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w';
+type HandlePosition = "nw" | "n" | "ne" | "e" | "se" | "s" | "sw" | "w";
 
 interface DragState {
-  type: 'move' | 'resize';
+  type: "move" | "resize";
   handle?: HandlePosition;
   startMouseX: number;
   startMouseY: number;
@@ -39,14 +39,14 @@ interface DragState {
 }
 
 const HANDLE_POSITIONS: { pos: HandlePosition; cursor: string; top: string; left: string }[] = [
-  { pos: 'nw', cursor: 'nwse-resize', top: '0%', left: '0%' },
-  { pos: 'n',  cursor: 'ns-resize',   top: '0%', left: '50%' },
-  { pos: 'ne', cursor: 'nesw-resize', top: '0%', left: '100%' },
-  { pos: 'e',  cursor: 'ew-resize',   top: '50%', left: '100%' },
-  { pos: 'se', cursor: 'nwse-resize', top: '100%', left: '100%' },
-  { pos: 's',  cursor: 'ns-resize',   top: '100%', left: '50%' },
-  { pos: 'sw', cursor: 'nesw-resize', top: '100%', left: '0%' },
-  { pos: 'w',  cursor: 'ew-resize',   top: '50%', left: '0%' },
+  { pos: "nw", cursor: "nwse-resize", top: "0%", left: "0%" },
+  { pos: "n",  cursor: "ns-resize",   top: "0%", left: "50%" },
+  { pos: "ne", cursor: "nesw-resize", top: "0%", left: "100%" },
+  { pos: "e",  cursor: "ew-resize",   top: "50%", left: "100%" },
+  { pos: "se", cursor: "nwse-resize", top: "100%", left: "100%" },
+  { pos: "s",  cursor: "ns-resize",   top: "100%", left: "50%" },
+  { pos: "sw", cursor: "nesw-resize", top: "100%", left: "0%" },
+  { pos: "w",  cursor: "ew-resize",   top: "50%", left: "0%" },
 ];
 
 export function FormFieldEditOverlay({
@@ -81,7 +81,7 @@ export function FormFieldEditOverlay({
     // Prefer CropBox height from backend (if available) for exact Y-flip consistency.
     const firstWidget = pageFields.find(f => f.widgets?.some(w => w.pageIndex === pageIndex))
       ?.widgets?.find(w => w.pageIndex === pageIndex);
-    const cbHeight = firstWidget?.cropBoxHeight;
+    const cbHeight = (firstWidget?.cropBoxHeight != null && firstWidget.cropBoxHeight > 0) ? firstWidget.cropBoxHeight : undefined;
     return {
       scaleX: pageWidth / pdfPage.size.width,
       scaleY: pageHeight / pdfPage.size.height,
@@ -101,7 +101,7 @@ export function FormFieldEditOverlay({
     const modified = modifiedFields.get(field.name);
     if (modified && modified.x != null && modified.y != null && modified.width != null && modified.height != null) {
       // modified coords are in PDF BL origin — convert to CSS using THIS widget's cropBoxHeight
-      const cropBoxHeight = widget.cropBoxHeight ?? pageHeightPts;
+      const cropBoxHeight = (widget.cropBoxHeight != null && widget.cropBoxHeight > 0) ? widget.cropBoxHeight : pageHeightPts;
       const css = pdfToCssRect(
         { x: modified.x, y: modified.y, width: modified.width, height: modified.height },
         cropBoxHeight
@@ -126,7 +126,7 @@ export function FormFieldEditOverlay({
     e.stopPropagation();
     setEditState({
       selectedFieldName: fieldName,
-      interaction: 'idle',
+      interaction: "idle",
       pendingRect: null,
     });
   }, [setEditState]);
@@ -134,7 +134,7 @@ export function FormFieldEditOverlay({
   const handlePointerDown = useCallback((
     e: React.PointerEvent,
     fieldName: string,
-    type: 'move' | 'resize',
+    type: "move" | "resize",
     handle?: HandlePosition
   ) => {
     e.preventDefault();
@@ -162,7 +162,7 @@ export function FormFieldEditOverlay({
 
     setEditState({
       selectedFieldName: fieldName,
-      interaction: type === 'move' ? 'moving' : 'resizing',
+      interaction: type === "move" ? "moving" : "resizing",
       pendingRect: { x: rect.left, y: rect.top, width: rect.width, height: rect.height },
     });
 
@@ -182,24 +182,24 @@ export function FormFieldEditOverlay({
     let newWidth = drag.startWidth;
     let newHeight = drag.startHeight;
 
-    if (drag.type === 'move') {
+    if (drag.type === "move") {
       newLeft = Math.max(0, Math.min(pageWidth - drag.startWidth, drag.startLeft + dx));
       newTop = Math.max(0, Math.min(pageHeight - drag.startHeight, drag.startTop + dy));
-    } else if (drag.type === 'resize' && drag.handle) {
+    } else if (drag.type === "resize" && drag.handle) {
       const h = drag.handle;
       // Adjust dimensions based on handle position
-      if (h.includes('e')) {
+      if (h.includes("e")) {
         newWidth = Math.max(MIN_SIZE_PX, drag.startWidth + dx);
       }
-      if (h.includes('w')) {
+      if (h.includes("w")) {
         const dw = Math.min(dx, drag.startWidth - MIN_SIZE_PX);
         newLeft = drag.startLeft + dw;
         newWidth = drag.startWidth - dw;
       }
-      if (h.includes('s')) {
+      if (h.includes("s")) {
         newHeight = Math.max(MIN_SIZE_PX, drag.startHeight + dy);
       }
-      if (h.includes('n')) {
+      if (h.includes("n")) {
         const dh = Math.min(dy, drag.startHeight - MIN_SIZE_PX);
         newTop = drag.startTop + dh;
         newHeight = drag.startHeight - dh;
@@ -217,18 +217,18 @@ export function FormFieldEditOverlay({
       scaleX, scaleY, pageHeightPts, modifiedFields,
     );
 
-    if (drag.type === 'move') {
+    if (drag.type === "move") {
       const snapped = snapRect(newLeft, newTop, newWidth, newHeight, targets);
       newLeft = snapped.left;
       newTop = snapped.top;
       setSnapGuides(snapped.guides);
-    } else if (drag.type === 'resize' && drag.handle) {
+    } else if (drag.type === "resize" && drag.handle) {
       const h = drag.handle;
       const resizeEdges: ResizeEdges = {
-        left: h.includes('w'),
-        right: h.includes('e'),
-        top: h.includes('n'),
-        bottom: h.includes('s'),
+        left: h.includes("w"),
+        right: h.includes("e"),
+        top: h.includes("n"),
+        bottom: h.includes("s"),
       };
       const snapped = snapRectResize(newLeft, newTop, newWidth, newHeight, resizeEdges, targets);
       newLeft = snapped.left;
@@ -241,7 +241,7 @@ export function FormFieldEditOverlay({
     const rect = { x: newLeft, y: newTop, width: newWidth, height: newHeight };
     pendingRectRef.current = rect;
     setEditState({
-      interaction: drag.type === 'move' ? 'moving' : 'resizing',
+      interaction: drag.type === "move" ? "moving" : "resizing",
       pendingRect: rect,
     });
   }, [pageWidth, pageHeight, allFields, pageIndex, scaleX, scaleY, pageHeightPts, modifiedFields, setEditState]);
@@ -259,7 +259,7 @@ export function FormFieldEditOverlay({
     setSnapGuides([]);
 
     if (!pendingRect) {
-      setEditState({ interaction: 'idle', pendingRect: null });
+      setEditState({ interaction: "idle", pendingRect: null });
       return;
     }
 
@@ -285,42 +285,42 @@ export function FormFieldEditOverlay({
       height: pdfRect.height,
     });
 
-    setEditState({ interaction: 'idle', pendingRect: null });
+    setEditState({ interaction: "idle", pendingRect: null });
   }, [scaleX, scaleY, pageHeightPts, updateFieldCoordinates, setEditState, allFields, pageIndex]);
 
   // Click on empty area deselects
   const handleOverlayClick = useCallback((e: React.PointerEvent) => {
     if (e.target === overlayRef.current) {
-      setEditState({ selectedFieldName: null, interaction: 'idle', pendingRect: null });
+      setEditState({ selectedFieldName: null, interaction: "idle", pendingRect: null });
     }
   }, [setEditState]);
 
   // Escape to deselect, Delete to remove selection
   useEffect(() => {
-    if (mode !== 'modify') return;
+    if (mode !== "modify") return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && editState.selectedFieldName) {
-        setEditState({ selectedFieldName: null, interaction: 'idle', pendingRect: null });
+      if (e.key === "Escape" && editState.selectedFieldName) {
+        setEditState({ selectedFieldName: null, interaction: "idle", pendingRect: null });
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [mode, editState.selectedFieldName, setEditState]);
 
-  if (mode !== 'modify') return null;
+  if (mode !== "modify") return null;
 
   return (
     <div
       ref={overlayRef}
       style={{
-        position: 'absolute',
+        position: "absolute",
         top: 0,
         left: 0,
-        width: '100%',
-        height: '100%',
+        width: "100%",
+        height: "100%",
         zIndex: 15,
-        pointerEvents: 'auto',
-        cursor: editState.interaction !== 'idle' ? 'grabbing' : 'default',
+        pointerEvents: "auto",
+        cursor: editState.interaction !== "idle" ? "grabbing" : "default",
       }}
       onPointerDown={handleOverlayClick}
       onPointerMove={handlePointerMove}
@@ -328,17 +328,17 @@ export function FormFieldEditOverlay({
     >
       {/* Snap guide lines */}
       {snapGuides.map((guide, i) =>
-        guide.axis === 'x' ? (
+        guide.axis === "x" ? (
           <div
             key={`guide-${i}`}
             style={{
-              position: 'absolute',
+              position: "absolute",
               left: guide.position,
               top: 0,
               width: 0,
-              height: '100%',
-              borderLeft: '1px dashed rgba(255, 0, 100, 0.6)',
-              pointerEvents: 'none',
+              height: "100%",
+              borderLeft: "1px dashed rgba(255, 0, 100, 0.6)",
+              pointerEvents: "none",
               zIndex: 20,
             }}
           />
@@ -346,13 +346,13 @@ export function FormFieldEditOverlay({
           <div
             key={`guide-${i}`}
             style={{
-              position: 'absolute',
+              position: "absolute",
               left: 0,
               top: guide.position,
-              width: '100%',
+              width: "100%",
               height: 0,
-              borderTop: '1px dashed rgba(255, 0, 100, 0.6)',
-              pointerEvents: 'none',
+              borderTop: "1px dashed rgba(255, 0, 100, 0.6)",
+              pointerEvents: "none",
               zIndex: 20,
             }}
           />
@@ -367,7 +367,7 @@ export function FormFieldEditOverlay({
         const isModified = modifiedFields.has(field.name);
 
         // Use pending rect during drag for the selected field
-        const usesPending = isSelected && editState.pendingRect && editState.interaction !== 'idle';
+        const usesPending = isSelected && editState.pendingRect && editState.interaction !== "idle";
         const rect = usesPending
           ? { left: editState.pendingRect!.x, top: editState.pendingRect!.y, width: editState.pendingRect!.width, height: editState.pendingRect!.height }
           : getFieldCssRect(field, widget);
@@ -378,46 +378,46 @@ export function FormFieldEditOverlay({
           <div
             key={field.name}
             style={{
-              position: 'absolute',
+              position: "absolute",
               left: rect.left,
               top: rect.top,
               width: rect.width,
               height: rect.height,
               border: isSelected
                 ? `2px solid ${color}`
-                : `1px solid ${isModified ? color : 'rgba(33, 150, 243, 0.4)'}`,
+                : `1px solid ${isModified ? color : "rgba(33, 150, 243, 0.4)"}`,
               borderRadius: 2,
-              background: isSelected ? 'rgba(33, 150, 243, 0.08)' : 'transparent',
-              cursor: isSelected ? 'grab' : 'pointer',
-              boxSizing: 'border-box',
-              transition: editState.interaction !== 'idle' ? 'none' : 'border-color 0.15s',
+              background: isSelected ? "rgba(33, 150, 243, 0.08)" : "transparent",
+              cursor: isSelected ? "grab" : "pointer",
+              boxSizing: "border-box",
+              transition: editState.interaction !== "idle" ? "none" : "border-color 0.15s",
             }}
             onPointerDown={(e) => {
               if (isSelected) {
-                handlePointerDown(e, field.name, 'move');
+                handlePointerDown(e, field.name, "move");
               } else {
                 handleFieldClick(e, field.name);
               }
             }}
           >
             {/* Resize handles — only for selected field */}
-            {isSelected && editState.interaction === 'idle' && HANDLE_POSITIONS.map(({ pos, cursor, top, left }) => (
+            {isSelected && editState.interaction === "idle" && HANDLE_POSITIONS.map(({ pos, cursor, top, left }) => (
               <div
                 key={pos}
                 style={{
-                  position: 'absolute',
+                  position: "absolute",
                   top,
                   left,
                   width: HANDLE_SIZE,
                   height: HANDLE_SIZE,
-                  background: 'white',
+                  background: "white",
                   border: `1.5px solid ${color}`,
                   borderRadius: 1,
-                  transform: 'translate(-50%, -50%)',
+                  transform: "translate(-50%, -50%)",
                   cursor,
                   zIndex: 1,
                 }}
-                onPointerDown={(e) => handlePointerDown(e, field.name, 'resize', pos)}
+                onPointerDown={(e) => handlePointerDown(e, field.name, "resize", pos)}
               />
             ))}
           </div>

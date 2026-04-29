@@ -747,8 +747,8 @@ export function FormFieldOverlay({
 
   if (pageFields.length === 0) return null;
 
-  // In modify or create mode, the edit/creation overlays handle interactions instead
-  const isEditMode = state.fields.length > 0 && (mode === 'modify' || mode === 'make');
+  // In modify mode, the edit overlay handles field rendering instead
+  const isEditMode = state.fields.length > 0 && mode === 'modify';
 
   return (
     <div

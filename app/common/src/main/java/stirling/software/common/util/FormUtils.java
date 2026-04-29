@@ -2418,8 +2418,21 @@ public class FormUtils {
             field.setReadOnly(true);
         }
 
-        PDAnnotationWidget widget =
-                existingWidget != null ? existingWidget : new PDAnnotationWidget();
+        PDAnnotationWidget widget;
+        if (existingWidget != null) {
+            widget = existingWidget;
+        } else {
+            // PDTerminalField constructors (e.g. new PDTextField(acroForm)) automatically
+            // create a default widget with a 0x0 rectangle. Reuse that widget instead of
+            // creating a new one — otherwise the field ends up with two widgets and PDF
+            // viewers only see the first (0x0) one.
+            List<PDAnnotationWidget> autoWidgets = field.getWidgets();
+            if (!autoWidgets.isEmpty()) {
+                widget = autoWidgets.get(0);
+            } else {
+                widget = new PDAnnotationWidget();
+            }
+        }
 
         // Ensure rectangle is valid and set before any appearance-related operations
         // please note removal of this might cause **subtle** issues
@@ -2449,8 +2462,10 @@ public class FormUtils {
             }
         }
 
-        field.getWidgets().add(widget);
-        widget.setParent(field);
+        if (!field.getWidgets().contains(widget)) {
+            field.getWidgets().add(widget);
+            widget.setParent(field);
+        }
 
         List<PDAnnotation> annotations = page.getAnnotations();
         if (annotations == null) {
