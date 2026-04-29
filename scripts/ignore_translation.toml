@@ -89,8 +89,6 @@ ignore = [
     'convert.pptExt',
     'convert.rtfExt',
     'convert.textRtf',
-    'cookieBanner.services.posthog',
-    'cookieBanner.services.scarf',
     'crop.autoCrop',
     'details',
     'endpointStatistics.dataTypeApi',

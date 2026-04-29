@@ -10,7 +10,7 @@ _USER_ID_HEADER = "X-User-Id"
 
 
 class UserIdMiddleware(BaseHTTPMiddleware):
-    """Extract X-User-Id header and set it as the current user for PostHog tracking."""
+    """Extract X-User-Id header and set it as the current user context."""
 
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         user_id = request.headers.get(_USER_ID_HEADER)

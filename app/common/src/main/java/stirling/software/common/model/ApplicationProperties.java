@@ -597,9 +597,6 @@ public class ApplicationProperties {
         private boolean customHTMLFiles;
         private String tessdataDir;
         private boolean enableAlphaFunctionality;
-        private Boolean enableAnalytics;
-        private Boolean enablePosthog;
-        private Boolean enableScarf;
         private Boolean enableDesktopInstallSlide;
         private Datasource datasource;
         private boolean disableSanitize;
@@ -626,20 +623,6 @@ public class ApplicationProperties {
             private String imageResolution = "full"; // Options: "full", "reduced"
             private String pageFormat = "A4"; // Options: "keep", "A4", "letter"
             private boolean stretchToFit = false; // Whether to stretch image to fill page
-        }
-
-        public boolean isAnalyticsEnabled() {
-            return this.enableAnalytics != null && this.enableAnalytics;
-        }
-
-        public boolean isPosthogEnabled() {
-            // Treat null as enabled when analytics is enabled
-            return this.isAnalyticsEnabled() && (this.enablePosthog == null || this.enablePosthog);
-        }
-
-        public boolean isScarfEnabled() {
-            // Treat null as enabled when analytics is enabled
-            return this.isAnalyticsEnabled() && (this.enableScarf == null || this.enableScarf);
         }
     }
 

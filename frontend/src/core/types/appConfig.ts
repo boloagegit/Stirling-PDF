@@ -14,9 +14,6 @@ export interface AppConfig {
   enableSaml?: boolean;
   isAdmin?: boolean;
   enableAlphaFunctionality?: boolean;
-  enableAnalytics?: boolean | null;
-  enablePosthog?: boolean | null;
-  enableScarf?: boolean | null;
   enableDesktopInstallSlide?: boolean;
   premiumEnabled?: boolean;
   premiumKey?: string;

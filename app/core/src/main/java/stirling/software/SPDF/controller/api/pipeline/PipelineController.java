@@ -26,7 +26,6 @@ import stirling.software.SPDF.model.PipelineResult;
 import stirling.software.SPDF.model.api.HandleDataRequest;
 import stirling.software.common.annotations.AutoJobPostMapping;
 import stirling.software.common.annotations.api.PipelineApi;
-import stirling.software.common.service.PostHogService;
 import stirling.software.common.util.GeneralUtils;
 import stirling.software.common.util.TempFile;
 import stirling.software.common.util.TempFileManager;
@@ -44,8 +43,6 @@ public class PipelineController {
     private final PipelineProcessor processor;
 
     private final ObjectMapper objectMapper;
-
-    private final PostHogService postHogService;
 
     private final TempFileManager tempFileManager;
 
@@ -69,12 +66,10 @@ public class PipelineController {
 
         List<String> operationNames =
                 config.getOperations().stream().map(PipelineOperation::getOperation).toList();
-
-        Map<String, Object> properties = new HashMap<>();
-        properties.put("operations", operationNames);
-        properties.put("fileCount", files.length);
-
-        postHogService.captureEvent("pipeline_api_event", properties);
+        log.info(
+                "Processing pipeline API request with operations: {}, fileCount: {}",
+                operationNames,
+                files.length);
 
         try {
             List<Resource> inputFiles = processor.generateInputFiles(files);
