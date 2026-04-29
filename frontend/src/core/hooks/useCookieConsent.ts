@@ -143,21 +143,7 @@ export const useCookieConsent = ({
                 readOnly: true,
               },
               analytics: {
-                services: {
-                  ...(config?.enablePosthog !== false && {
-                    posthog: {
-                      label: t(
-                        "cookieBanner.services.posthog",
-                        "PostHog Analytics",
-                      ),
-                    },
-                  }),
-                  ...(config?.enableScarf !== false && {
-                    scarf: {
-                      label: t("cookieBanner.services.scarf", "Scarf Pixel"),
-                    },
-                  }),
-                },
+                services: {},
               },
             },
             language: {
@@ -295,8 +281,6 @@ export const useCookieConsent = ({
     };
   }, [
     analyticsEnabled,
-    config?.enablePosthog,
-    config?.enableScarf,
     t,
     forceLightMode,
   ]);
