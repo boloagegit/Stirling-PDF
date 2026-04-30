@@ -240,7 +240,7 @@ export default function Workbench() {
       </Box>
 
       <Footer
-        analyticsEnabled={config?.enableAnalytics === true}
+        analyticsEnabled={false}
         termsAndConditions={config?.termsAndConditions}
         privacyPolicy={config?.privacyPolicy}
         cookiePolicy={config?.cookiePolicy}

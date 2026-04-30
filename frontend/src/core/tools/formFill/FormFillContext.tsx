@@ -432,10 +432,10 @@ export function FormFillProvider({
   const commitNewFields = useCallback(
     async (file: File | Blob): Promise<Blob> => {
       const provider = providerRef.current;
-      if (!provider.addFields) {
+      if (!(provider as IFormDataProvider).addFields) {
         throw new Error("Current provider does not support adding fields");
       }
-      const blob = await provider.addFields(file, creationState.pendingFields);
+      const blob = await (provider as IFormDataProvider).addFields!(file, creationState.pendingFields);
       // Clear pending fields after successful commit
       setCreationState((prev) => ({ ...prev, pendingFields: [] }));
       return blob;
@@ -483,7 +483,7 @@ export function FormFillProvider({
   const commitFieldModifications = useCallback(
     async (file: File | Blob): Promise<Blob> => {
       const provider = providerRef.current;
-      if (!provider.modifyFields) {
+      if (!(provider as IFormDataProvider).modifyFields) {
         throw new Error("Current provider does not support modifying fields");
       }
       const updates: ModifyFieldDefinition[] = [];
@@ -496,7 +496,7 @@ export function FormFillProvider({
       if (updates.length === 0) {
         throw new Error("No field modifications to commit");
       }
-      const blob = await provider.modifyFields(file, updates);
+      const blob = await (provider as IFormDataProvider).modifyFields!(file, updates);
       // Clear modifications after successful commit
       setModifiedFields(new Map());
       setEditStateRaw({

@@ -197,8 +197,8 @@ export function useOnboardingOrchestrator(
   useEffect(() => {
     setRuntimeState((prev) => ({
       ...prev,
-      analyticsEnabled: config?.enableAnalytics === true,
-      analyticsNotConfigured: config?.enableAnalytics == null,
+      analyticsEnabled: false,
+      analyticsNotConfigured: false,
       desktopSlideEnabled: config?.enableDesktopInstallSlide ?? true,
       licenseNotice: {
         totalUsers: serverExperience.totalUsers,
@@ -212,7 +212,6 @@ export function useOnboardingOrchestrator(
       },
     }));
   }, [
-    config?.enableAnalytics,
     serverExperience.totalUsers,
     serverExperience.freeTierLimit,
     serverExperience.overFreeTierLimit,

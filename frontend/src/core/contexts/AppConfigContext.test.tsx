@@ -168,7 +168,6 @@ describe("AppConfigContext", () => {
       enableLogin: true,
       appNameNavbar: "Stirling PDF",
       isAdmin: true,
-      enableAnalytics: true,
     };
 
     // First call returns initial config
