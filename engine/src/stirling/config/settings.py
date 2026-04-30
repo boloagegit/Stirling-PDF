@@ -43,6 +43,10 @@ class AppSettings(BaseSettings):
     log_level: str = Field(default="INFO", validation_alias="STIRLING_LOG_LEVEL")
     log_file: str = Field(default="", validation_alias="STIRLING_LOG_FILE")
 
+    posthog_enabled: bool = Field(validation_alias="STIRLING_POSTHOG_ENABLED")
+    posthog_api_key: str = Field(validation_alias="STIRLING_POSTHOG_API_KEY")
+    posthog_host: str = Field(validation_alias="STIRLING_POSTHOG_HOST")
+
 
 def _configure_logging(level_name: str, log_file: str) -> None:
     """Configure the ``stirling`` logger hierarchy."""
