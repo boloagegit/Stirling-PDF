@@ -10,6 +10,6 @@ from stirling.config import AppSettings
 current_user_id: ContextVar[str | None] = ContextVar("current_user_id", default=None)
 
 
-def setup_tracking(settings: AppSettings) -> TracerProvider | None:  # noqa: ARG001
+def setup_tracking(_settings: AppSettings) -> TracerProvider | None:
     """Telemetry removed. Always returns None."""
     return None
