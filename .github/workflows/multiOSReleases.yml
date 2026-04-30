@@ -427,10 +427,28 @@ jobs:
             exit 1
           fi
 
+      - name: Skip macOS code signing
+        if: (matrix.platform == 'macos-15' || matrix.platform == 'macos-15-intel') && !(github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.sign != 'false') || github.ref == 'refs/heads/V2-master')
+        shell: bash
+        run: |
+          cat > ./frontend/src-tauri/tauri.macos.conf.json <<EOF
+          {
+            "bundle": {
+              "macOS": {
+                "signingIdentity": "-"
+              }
+            }
+          }
+          EOF
+          echo "Generated tauri.macos.conf.json for ad-hoc signing (no certificate needed)"
+
       - name: Build Tauri app
         uses: tauri-apps/tauri-action@51a9f1156b33df106d827c3a78f8f894946c5faa # v0.5.25
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Apple signing env vars — only set when signing is requested.
+          # When empty/unset, tauri-action and Tauri CLI skip certificate import entirely.
+          # APPLE_SIGNING_IDENTITY="-" tells Tauri to use ad-hoc signing (no cert needed).
           APPLE_CERTIFICATE: ${{ (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.sign != 'false') || github.ref == 'refs/heads/V2-master') && secrets.APPLE_CERTIFICATE || '' }}
           APPLE_CERTIFICATE_PASSWORD: ${{ (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.sign != 'false') || github.ref == 'refs/heads/V2-master') && secrets.APPLE_CERTIFICATE_PASSWORD || '' }}
           APPLE_SIGNING_IDENTITY: ${{ (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.sign != 'false') || github.ref == 'refs/heads/V2-master') && env.APPLE_SIGNING_IDENTITY || '-' }}
