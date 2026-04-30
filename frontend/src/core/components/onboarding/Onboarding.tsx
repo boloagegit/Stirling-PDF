@@ -30,7 +30,6 @@ import { createWhatsNewStepsConfig } from "@app/components/onboarding/whatsNewSt
 import { removeAllGlows } from "@app/components/onboarding/tourGlow";
 import { useFilesModalContext } from "@app/contexts/FilesModalContext";
 import { useServerExperience } from "@app/hooks/useServerExperience";
-import { useAppConfig } from "@app/contexts/AppConfigContext";
 import "@app/components/onboarding/OnboardingTour.css";
 import { useAccountLogout } from "@app/extensions/accountLogout";
 import { useAuth } from "@app/auth/UseSession";
@@ -57,7 +56,6 @@ export default function Onboarding() {
     requestedTourType,
     clearTourRequest,
   } = useTourRequest();
-  const { config } = useAppConfig();
   const [firstLoginModalOpen, setFirstLoginModalOpen] = useState(false);
   const [mfaModalOpen, setMfaModalOpen] = useState(false);
   const accountLogout = useAccountLogout();

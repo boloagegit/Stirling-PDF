@@ -72,11 +72,11 @@ export function FormFieldEditOverlay({
     [fieldsByPage, pageIndex]
   );
 
-  const { scaleX, scaleY, pageWidthPts, pageHeightPts } = useMemo(() => {
+  const { scaleX, scaleY, pageHeightPts } = useMemo(() => {
     const pdfPage = documentState?.document?.pages?.[pageIndex];
     if (!pdfPage || !pdfPage.size || !pageWidth || !pageHeight) {
       const s = documentState?.scale ?? 1;
-      return { scaleX: s, scaleY: s, pageWidthPts: pageWidth / s, pageHeightPts: pageHeight / s };
+      return { scaleX: s, scaleY: s, pageHeightPts: pageHeight / s };
     }
     // Prefer CropBox height from backend (if available) for exact Y-flip consistency.
     const firstWidget = pageFields.find(f => f.widgets?.some(w => w.pageIndex === pageIndex))
@@ -85,7 +85,6 @@ export function FormFieldEditOverlay({
     return {
       scaleX: pageWidth / pdfPage.size.width,
       scaleY: pageHeight / pdfPage.size.height,
-      pageWidthPts: pdfPage.size.width,
       pageHeightPts: cbHeight ?? pdfPage.size.height,
     };
   }, [documentState, pageIndex, pageWidth, pageHeight, pageFields]);

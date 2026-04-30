@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { BASE_PATH } from "@app/constants/app";
-import { useAppConfig } from "@app/contexts/AppConfigContext";
 import { TOUR_STATE_EVENT, type TourStatePayload } from "@app/constants/events";
 import { getCookieConsentOverrides } from "@app/extensions/cookieConsentConfig";
 
@@ -28,7 +27,6 @@ export const useCookieConsent = ({
   forceLightMode = false,
 }: CookieConsentConfig = {}) => {
   const { t } = useTranslation();
-  const { config } = useAppConfig();
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
