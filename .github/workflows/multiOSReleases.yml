@@ -431,12 +431,12 @@ jobs:
         uses: tauri-apps/tauri-action@51a9f1156b33df106d827c3a78f8f894946c5faa # v0.5.25
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
-          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-          APPLE_SIGNING_IDENTITY: ${{ env.APPLE_SIGNING_IDENTITY }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_CERTIFICATE: ${{ (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.sign != 'false') || github.ref == 'refs/heads/V2-master') && secrets.APPLE_CERTIFICATE || '' }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.sign != 'false') || github.ref == 'refs/heads/V2-master') && secrets.APPLE_CERTIFICATE_PASSWORD || '' }}
+          APPLE_SIGNING_IDENTITY: ${{ (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.sign != 'false') || github.ref == 'refs/heads/V2-master') && env.APPLE_SIGNING_IDENTITY || '' }}
+          APPLE_ID: ${{ (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.sign != 'false') || github.ref == 'refs/heads/V2-master') && secrets.APPLE_ID || '' }}
+          APPLE_PASSWORD: ${{ (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.sign != 'false') || github.ref == 'refs/heads/V2-master') && secrets.APPLE_ID_PASSWORD || '' }}
+          APPLE_TEAM_ID: ${{ (github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.sign != 'false') || github.ref == 'refs/heads/V2-master') && secrets.APPLE_TEAM_ID || '' }}
           # AppImage signing — three env vars work together:
           #   SIGN=1                        tells linuxdeploy-plugin-appimage to forward --sign to appimagetool
           #   APPIMAGETOOL_SIGN_PASSPHRASE  appimagetool uses this to unlock the GPG key non-interactively
