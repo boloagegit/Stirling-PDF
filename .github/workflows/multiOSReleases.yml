@@ -450,6 +450,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           APPLE_SIGNING_IDENTITY: "-"
           CI: true
+          VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY || 'sb_publishable_UHz2SVRF5mvdrPHWkRteyA_yNlZTkYb' }}
+          VITE_SAAS_SERVER_URL: ${{ secrets.VITE_SAAS_SERVER_URL || 'https://app.stirlingpdf.com' }}
+          VITE_SAAS_BACKEND_API_URL: ${{ secrets.VITE_SAAS_BACKEND_API_URL || 'https://api.stirlingpdf.com' }}
 
       - name: Build Tauri app
         if: "!((matrix.platform == 'macos-15' || matrix.platform == 'macos-15-intel') && !(github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.sign != 'false') || github.ref == 'refs/heads/V2-master'))"
