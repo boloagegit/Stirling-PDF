@@ -443,6 +443,16 @@ jobs:
           echo "Generated tauri.macos.conf.json for ad-hoc signing (no certificate needed)"
 
       - name: Build Tauri app
+        if: (matrix.platform == 'macos-15' || matrix.platform == 'macos-15-intel') && !(github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.sign != 'false') || github.ref == 'refs/heads/V2-master')
+        working-directory: ./frontend
+        run: npx tauri build ${{ matrix.args }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APPLE_SIGNING_IDENTITY: "-"
+          CI: true
+
+      - name: Build Tauri app
+        if: "!((matrix.platform == 'macos-15' || matrix.platform == 'macos-15-intel') && !(github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.sign != 'false') || github.ref == 'refs/heads/V2-master'))"
         uses: tauri-apps/tauri-action@51a9f1156b33df106d827c3a78f8f894946c5faa # v0.5.25
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
