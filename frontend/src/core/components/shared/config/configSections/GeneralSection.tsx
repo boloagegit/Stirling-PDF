@@ -213,147 +213,152 @@ const GeneralSection: React.FC<GeneralSectionProps> = ({
       )}
 
       {/* Update Check Section — hidden when login is disabled (desktop local-only mode) */}
-      {!hideUpdateSection && config?.enableLogin !== false && config?.appVersion && (
-        <Paper withBorder p="md" radius="md">
-          <Stack gap="md">
-            <div>
-              <Group justify="space-between" align="center">
-                <div>
-                  <Text fw={600} size="sm">
-                    {t("settings.general.updates.title", "Software Updates")}
-                  </Text>
-                  <Text size="xs" c="dimmed" mt={4}>
-                    {t(
-                      "settings.general.updates.description",
-                      "Check for updates and view version information",
+      {!hideUpdateSection &&
+        config?.enableLogin !== false &&
+        config?.appVersion && (
+          <Paper withBorder p="md" radius="md">
+            <Stack gap="md">
+              <div>
+                <Group justify="space-between" align="center">
+                  <div>
+                    <Text fw={600} size="sm">
+                      {t("settings.general.updates.title", "Software Updates")}
+                    </Text>
+                    <Text size="xs" c="dimmed" mt={4}>
+                      {t(
+                        "settings.general.updates.description",
+                        "Check for updates and view version information",
+                      )}
+                    </Text>
+                  </div>
+                  {updateSummary && (
+                    <Badge
+                      color={
+                        updateSummary.max_priority === "urgent" ? "red" : "blue"
+                      }
+                      variant="filled"
+                    >
+                      {updateSummary.max_priority === "urgent"
+                        ? t("update.urgentUpdateAvailable", "Urgent Update")
+                        : t("update.updateAvailable", "Update Available")}
+                    </Badge>
+                  )}
+                </Group>
+              </div>
+              {appVersion !== undefined && (
+                <Group justify="space-between" align="center">
+                  <div>
+                    <Text size="sm" c="dimmed">
+                      {t(
+                        "settings.general.updates.currentFrontendVersion",
+                        "Current Frontend Version",
+                      )}
+                      :{" "}
+                      <Text component="span" fw={500}>
+                        {frontendVersionLabel}
+                      </Text>
+                    </Text>
+                    {mismatchVersion && (
+                      <Text size="sm" c="red" mt={4}>
+                        {t(
+                          "settings.general.updates.versionMismatch",
+                          "Warning: A mismatch has been detected between the client version and the AppConfig version. Using different versions can lead to compatibility issues, errors, and security risks. Please ensure that server and client are using the same version.",
+                        )}
+                      </Text>
                     )}
-                  </Text>
-                </div>
-                {updateSummary && (
-                  <Badge
-                    color={
-                      updateSummary.max_priority === "urgent" ? "red" : "blue"
-                    }
-                    variant="filled"
-                  >
-                    {updateSummary.max_priority === "urgent"
-                      ? t("update.urgentUpdateAvailable", "Urgent Update")
-                      : t("update.updateAvailable", "Update Available")}
-                  </Badge>
-                )}
-              </Group>
-            </div>
-            {appVersion !== undefined && (
+                  </div>
+                </Group>
+              )}
               <Group justify="space-between" align="center">
                 <div>
                   <Text size="sm" c="dimmed">
                     {t(
-                      "settings.general.updates.currentFrontendVersion",
-                      "Current Frontend Version",
+                      "settings.general.updates.currentBackendVersion",
+                      "Current Backend Version",
                     )}
                     :{" "}
                     <Text component="span" fw={500}>
-                      {frontendVersionLabel}
+                      {config.appVersion}
                     </Text>
                   </Text>
-                  {mismatchVersion && (
-                    <Text size="sm" c="red" mt={4}>
+                  {updateSummary && (
+                    <Text size="sm" c="dimmed" mt={4}>
                       {t(
-                        "settings.general.updates.versionMismatch",
-                        "Warning: A mismatch has been detected between the client version and the AppConfig version. Using different versions can lead to compatibility issues, errors, and security risks. Please ensure that server and client are using the same version.",
+                        "settings.general.updates.latestVersion",
+                        "Latest Version",
                       )}
+                      :{" "}
+                      <Text component="span" fw={500} c="blue">
+                        {updateSummary.latest_version}
+                      </Text>
                     </Text>
                   )}
                 </div>
-              </Group>
-            )}
-            <Group justify="space-between" align="center">
-              <div>
-                <Text size="sm" c="dimmed">
-                  {t(
-                    "settings.general.updates.currentBackendVersion",
-                    "Current Backend Version",
-                  )}
-                  :{" "}
-                  <Text component="span" fw={500}>
-                    {config.appVersion}
-                  </Text>
-                </Text>
-                {updateSummary && (
-                  <Text size="sm" c="dimmed" mt={4}>
-                    {t(
-                      "settings.general.updates.latestVersion",
-                      "Latest Version",
-                    )}
-                    :{" "}
-                    <Text component="span" fw={500} c="blue">
-                      {updateSummary.latest_version}
-                    </Text>
-                  </Text>
-                )}
-              </div>
-              <Group gap="sm">
-                <Button
-                  size="sm"
-                  variant="default"
-                  onClick={checkForUpdate}
-                  loading={checkingUpdate}
-                  leftSection={
-                    <LocalIcon
-                      icon="refresh-rounded"
-                      width="1rem"
-                      height="1rem"
-                    />
-                  }
-                >
-                  {t(
-                    "settings.general.updates.checkForUpdates",
-                    "Check for Updates",
-                  )}
-                </Button>
-                {updateSummary && (
+                <Group gap="sm">
                   <Button
                     size="sm"
-                    color={
-                      updateSummary.max_priority === "urgent" ? "red" : "blue"
-                    }
-                    onClick={() => setUpdateModalOpened(true)}
+                    variant="default"
+                    onClick={checkForUpdate}
+                    loading={checkingUpdate}
                     leftSection={
                       <LocalIcon
-                        icon="system-update-alt-rounded"
+                        icon="refresh-rounded"
                         width="1rem"
                         height="1rem"
                       />
                     }
                   >
-                    {t("settings.general.updates.viewDetails", "View Details")}
+                    {t(
+                      "settings.general.updates.checkForUpdates",
+                      "Check for Updates",
+                    )}
                   </Button>
-                )}
-              </Group>
-            </Group>
-
-            {updateSummary?.any_breaking && (
-              <Alert
-                color="orange"
-                title={t(
-                  "update.breakingChangesDetected",
-                  "Breaking Changes Detected",
-                )}
-                styles={{
-                  title: { fontWeight: 600 },
-                }}
-              >
-                <Text size="sm">
-                  {t(
-                    "update.breakingChangesMessage",
-                    "Some versions contain breaking changes. Please review the migration guides before updating.",
+                  {updateSummary && (
+                    <Button
+                      size="sm"
+                      color={
+                        updateSummary.max_priority === "urgent" ? "red" : "blue"
+                      }
+                      onClick={() => setUpdateModalOpened(true)}
+                      leftSection={
+                        <LocalIcon
+                          icon="system-update-alt-rounded"
+                          width="1rem"
+                          height="1rem"
+                        />
+                      }
+                    >
+                      {t(
+                        "settings.general.updates.viewDetails",
+                        "View Details",
+                      )}
+                    </Button>
                   )}
-                </Text>
-              </Alert>
-            )}
-          </Stack>
-        </Paper>
-      )}
+                </Group>
+              </Group>
+
+              {updateSummary?.any_breaking && (
+                <Alert
+                  color="orange"
+                  title={t(
+                    "update.breakingChangesDetected",
+                    "Breaking Changes Detected",
+                  )}
+                  styles={{
+                    title: { fontWeight: 600 },
+                  }}
+                >
+                  <Text size="sm">
+                    {t(
+                      "update.breakingChangesMessage",
+                      "Some versions contain breaking changes. Please review the migration guides before updating.",
+                    )}
+                  </Text>
+                </Alert>
+              )}
+            </Stack>
+          </Paper>
+        )}
 
       <Paper withBorder p="md" radius="md">
         <Stack gap="md">

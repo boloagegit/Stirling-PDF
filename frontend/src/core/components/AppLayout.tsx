@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { useBanner } from "@app/contexts/BannerContext";
 import { useAppConfig } from "@app/contexts/AppConfigContext";
 import NavigationWarningModal from "@app/components/shared/NavigationWarningModal";

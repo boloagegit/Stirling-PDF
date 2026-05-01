@@ -121,7 +121,9 @@ const AppConfigModalInner: React.FC<AppConfigModalProps> = ({
     return rawConfigNavSections
       .map((section) => ({
         ...section,
-        items: section.items.filter((item) => item.key !== ("connectionMode" as string)),
+        items: section.items.filter(
+          (item) => item.key !== ("connectionMode" as string),
+        ),
       }))
       .filter((section) => section.items.length > 0);
   }, [rawConfigNavSections, loginEnabled]);
