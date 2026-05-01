@@ -605,7 +605,7 @@ export function FormFieldOverlay({
   pageHeight,
   fileId,
 }: FormFieldOverlayProps) {
-  const { setValue, setActiveField, fieldsByPage, state, forFileId } =
+  const { setValue, setActiveField, fieldsByPage, state, forFileId, mode } =
     useFormFill();
   const { activeFieldName, validationErrors } = state;
   const { printActions, scrollActions, exportActions } = useViewer();
@@ -747,6 +747,9 @@ export function FormFieldOverlay({
 
   if (pageFields.length === 0) return null;
 
+  // In modify mode, the edit overlay handles field rendering instead
+  const isEditMode = state.fields.length > 0 && mode === "modify";
+
   return (
     <div
       style={{
@@ -760,29 +763,31 @@ export function FormFieldOverlay({
       }}
       data-form-overlay-page={pageIndex}
     >
-      {pageFields.map((field: FormField) =>
-        (field.widgets || [])
-          .filter((w: WidgetCoordinates) => w.pageIndex === pageIndex)
-          .map((widget: WidgetCoordinates, widgetIdx: number) => {
-            // Coordinates are in un-rotated PDF space (y-flipped to CSS TL origin).
-            // The <Rotate> CSS wrapper handles visual rotation for us,
-            // just like it does for TilingLayer, LinkLayer, etc.
-            return (
-              <WidgetInput
-                key={`${field.name}-${widgetIdx}`}
-                field={field}
-                widget={widget}
-                isActive={activeFieldName === field.name}
-                error={validationErrors[field.name]}
-                scaleX={scaleX}
-                scaleY={scaleY}
-                onFocus={handleFocus}
-                onChange={handleChange}
-                onButtonClick={handleButtonClick}
-              />
-            );
-          }),
-      )}
+      {/* In edit modes, don't render interactive widgets — the edit/creation overlays handle that */}
+      {!isEditMode &&
+        pageFields.map((field: FormField) =>
+          (field.widgets || [])
+            .filter((w: WidgetCoordinates) => w.pageIndex === pageIndex)
+            .map((widget: WidgetCoordinates, widgetIdx: number) => {
+              // Coordinates are in un-rotated PDF space (y-flipped to CSS TL origin).
+              // The <Rotate> CSS wrapper handles visual rotation for us,
+              // just like it does for TilingLayer, LinkLayer, etc.
+              return (
+                <WidgetInput
+                  key={`${field.name}-${widgetIdx}`}
+                  field={field}
+                  widget={widget}
+                  isActive={activeFieldName === field.name}
+                  error={validationErrors[field.name]}
+                  scaleX={scaleX}
+                  scaleY={scaleY}
+                  onFocus={handleFocus}
+                  onChange={handleChange}
+                  onButtonClick={handleButtonClick}
+                />
+              );
+            }),
+        )}
     </div>
   );
 }

@@ -127,6 +127,24 @@ pub fn run() {
         add_log(format!("⚠️ Failed to apply provisioning file: {}", err));
       }
 
+      // Skip onboarding on first launch: mark setup as completed and set connection
+      // mode so the frontend goes straight to local mode without showing the wizard.
+      {
+        use tauri_plugin_store::StoreExt;
+        if let Ok(store) = app.handle().store("connection.json") {
+          let already_completed = store
+            .get("setup_completed")
+            .and_then(|v| v.as_bool())
+            .unwrap_or(false);
+          if !already_completed {
+            store.set("setup_completed", serde_json::json!(true));
+            store.set("connection_mode", serde_json::json!("saas"));
+            let _ = store.save();
+            add_log("✅ Auto-completed first-launch setup (skipping onboarding)".to_string());
+          }
+        }
+      }
+
       // Start backend immediately, non-blocking
       let app_handle = app.handle().clone();
 

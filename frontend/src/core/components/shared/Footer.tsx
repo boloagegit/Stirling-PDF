@@ -42,9 +42,9 @@ export default function Footer({
   });
 
   // Default URLs
-  const defaultTermsUrl = "https://www.stirling.com/terms";
-  const defaultPrivacyUrl = "https://www.stirling.com/privacy";
-  const defaultAccessibilityUrl = "https://www.stirling.com/accessibility";
+  const defaultTermsUrl = "";
+  const defaultPrivacyUrl = "";
+  const defaultAccessibilityUrl = "";
 
   // Use provided URLs or fall back to defaults
   const finalTermsUrl = finalTermsAndConditions || defaultTermsUrl;
@@ -82,15 +82,6 @@ export default function Footer({
       >
         <a
           className="footer-link px-3"
-          id="survey"
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://stirlingpdf.info/s/cm28y3niq000o56dv7liv8wsu"
-        >
-          {t("survey.nav", "Survey")}
-        </a>
-        <a
-          className="footer-link px-3"
           target="_blank"
           rel="noopener noreferrer"
           href={finalPrivacyUrl}
@@ -104,22 +95,6 @@ export default function Footer({
           href={finalTermsUrl}
         >
           {t("legal.terms", "Terms and Conditions")}
-        </a>
-        <a
-          className="footer-link px-3"
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://discord.gg/Cn8pWhQRxZ"
-        >
-          {t("footer.discord", "Discord")}
-        </a>
-        <a
-          className="footer-link px-3"
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://github.com/Stirling-Tools/Stirling-PDF"
-        >
-          {t("footer.issues", "GitHub")}
         </a>
         <a
           className="footer-link px-3"

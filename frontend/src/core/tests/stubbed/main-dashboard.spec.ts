@@ -101,34 +101,15 @@ test.describe("2. Main Dashboard / Home Page", () => {
 
   test.describe("2.4 Dashboard - Footer Links", () => {
     test("should display footer links with correct URLs", async ({ page }) => {
-      await expect(page.getByText("Survey").first()).toBeVisible({
-        timeout: 10000,
-      });
       await expect(page.getByText("Privacy Policy").first()).toBeVisible({
         timeout: 10000,
       });
       await expect(page.getByText(/Terms/i).first()).toBeVisible({
         timeout: 10000,
       });
-      await expect(page.getByText("Discord").first()).toBeVisible({
-        timeout: 10000,
-      });
-      await expect(page.getByText("GitHub").first()).toBeVisible({
-        timeout: 10000,
-      });
       await expect(page.getByText("Accessibility").first()).toBeVisible({
         timeout: 10000,
       });
-
-      const githubLink = page
-        .locator('a[href*="github.com/Stirling-Tools/Stirling-PDF"]')
-        .first();
-      await expect(githubLink).toBeVisible();
-
-      const discordLink = page
-        .locator('a[href*="discord.gg/Cn8pWhQRxZ"]')
-        .first();
-      await expect(discordLink).toBeVisible();
     });
   });
 

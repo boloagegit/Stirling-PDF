@@ -174,10 +174,7 @@ system:
   showSettingsWhenNoLogin: true # set to 'false' to hide settings button when login is disabled (enableLogin: false). Only applies when login is disabled.
   customHTMLFiles: false # enable to have files placed in /customFiles/templates override the existing template HTML files
   tessdataDir: "" # path to the directory containing the Tessdata files. This setting is relevant for Windows systems. For Windows users, this path should be adjusted to point to the appropriate directory where the Tessdata files are stored.
-  enableAnalytics: null # Master toggle for analytics: set to 'true' to enable all analytics, 'false' to disable all analytics, or leave as 'null' to prompt admin on first launch
-  enableDesktopInstallSlide: true # Set to 'false' to hide the desktop app installation slide in the onboarding flow
-  enablePosthog: null # Enable PostHog analytics (open-source product analytics): set to 'true' to enable, 'false' to disable, or 'null' to enable by default when analytics is enabled
-  enableScarf: null # Enable Scarf tracking pixel: set to 'true' to enable, 'false' to disable, or 'null' to enable by default when analytics is enabled
+  enableDesktopInstallSlide: false # Set to 'false' to hide the desktop app installation slide in the onboarding flow
   enableUrlToPDF: false # Set to 'true' to enable URL to PDF, INTERNAL ONLY, known security issues, should not be used externally
   disableSanitize: false # set to true to disable Sanitize HTML; (can lead to injections in HTML)
   maxDPI: 500 # Maximum allowed DPI for PDF to image conversion
@@ -233,7 +230,7 @@ system:
     libreofficeDir: "" # Defaults to tempFileManagement.baseTmpDir/libreoffice
     systemTempDir: "" # Only used if cleanupSystemTemp is true
     prefix: stirling-pdf- # Prefix for temp file names
-    maxAgeHours: 24 # Maximum age in hours before temp files are cleaned up
+    maxAgeHours: 2 # Maximum age in hours before temp files are cleaned up
     cleanupIntervalMinutes: 30 # How often to run cleanup (in minutes)
     startupCleanup: true # Clean up old temp files on startup
     cleanupSystemTemp: false # Whether to clean broader system temp directory
@@ -279,7 +276,7 @@ endpoints:
   groupsToRemove: [] # list groups to disable (e.g. ['LibreOffice', 'DeveloperTools', 'DeveloperDocs', 'Automation'])
 
 metrics:
-  enabled: true # 'true' to enable Info APIs (`/api/*`) endpoints, 'false' to disable
+  enabled: false # 'true' to enable Info APIs (`/api/*`) endpoints, 'false' to disable
 
 # Automatically Generated Settings (Do Not Edit Directly)
 AutomaticallyGenerated:

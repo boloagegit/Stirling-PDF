@@ -14,9 +14,8 @@ export interface AppConfig {
   enableSaml?: boolean;
   isAdmin?: boolean;
   enableAlphaFunctionality?: boolean;
+  /** @deprecated Analytics removed — kept for proprietary layer type compatibility */
   enableAnalytics?: boolean | null;
-  enablePosthog?: boolean | null;
-  enableScarf?: boolean | null;
   enableDesktopInstallSlide?: boolean;
   premiumEnabled?: boolean;
   premiumKey?: string;

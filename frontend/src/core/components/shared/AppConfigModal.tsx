@@ -109,11 +109,24 @@ const AppConfigModalInner: React.FC<AppConfigModalProps> = ({
   const loginEnabled = config?.enableLogin ?? false;
 
   // Left navigation structure and icons
-  const configNavSections = useConfigNavSections(
+  const rawConfigNavSections = useConfigNavSections(
     isAdmin,
     runningEE,
     loginEnabled,
   );
+
+  // When login is disabled, hide login-dependent settings (e.g. connection mode)
+  const configNavSections = useMemo(() => {
+    if (loginEnabled) return rawConfigNavSections;
+    return rawConfigNavSections
+      .map((section) => ({
+        ...section,
+        items: section.items.filter(
+          (item) => item.key !== ("connectionMode" as string),
+        ),
+      }))
+      .filter((section) => section.items.length > 0);
+  }, [rawConfigNavSections, loginEnabled]);
 
   const activeLabel = useMemo(() => {
     for (const section of configNavSections) {

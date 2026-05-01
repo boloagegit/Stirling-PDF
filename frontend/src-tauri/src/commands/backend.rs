@@ -212,6 +212,12 @@ fn run_stirling_pdf_jar(app: &tauri::AppHandle, java_path: &PathBuf, jar_path: &
         "-Dserver.port=0",  // Let OS assign an available port
         "-Dsecurity.enableLogin=false",  // Disable login for desktop mode
         "-Dsecurity.csrfDisabled=true",  // Disable CSRF for desktop mode
+        "-Dsystem.enableMobileScanner=false",  // No mobile scanner in desktop
+        "-Dsystem.googleDrive.enabled=false",  // No Google Drive in desktop
+        "-Dui.hideDisabledTools.googleDrive=true",  // Hide Google Drive button
+        "-Dui.hideDisabledTools.mobileQRScanner=true",  // Hide mobile QR button
+        "-Dui.defaultHideUnavailableTools=true",  // Hide unavailable tools
+        "-Dui.defaultHideUnavailableConversions=true",  // Hide unavailable conversions
         "-jar",
         jar_path.to_str().unwrap(),
     ];
