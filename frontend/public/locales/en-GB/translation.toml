@@ -4206,10 +4206,6 @@ desc = "Remove all interactive elements and forms from a PDF"
 tags = "simplify,remove,interactive,flatten,flatten form,remove form fields,make static,finalize form,lock form,disable editing,convert to image,non-editable"
 title = "Flatten"
 
-[home.formFill]
-desc = "Fill PDF form fields interactively with a visual editor"
-title = "Fill Form"
-
 [home.getPdfInfo]
 desc = "Grabs any and all information possible on PDFs"
 tags = "info,metadata,details,PDF info,document info,properties,file info,get info,show info,view properties,document properties,statistics,page count,file details,inspect"
