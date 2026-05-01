@@ -2,22 +2,31 @@
   <img src="https://raw.githubusercontent.com/Stirling-Tools/Stirling-PDF/main/docs/stirling.png" width="80" alt="Stirling PDF logo">
 </p>
 
-<h1 align="center">Stirling PDF - The Open-Source PDF Platform</h1>
+<h1 align="center">Stirling PDF - Standalone Desktop Fork</h1>
+
+> **This is a personal fork of [Stirling-Tools/Stirling-PDF](https://github.com/Stirling-Tools/Stirling-PDF)**, customized for standalone desktop deployment.
+>
+> Based on upstream commit [`890cf16`](https://github.com/Stirling-Tools/Stirling-PDF/commit/890cf16f7) (main branch).
+
+## Changes from Upstream
+
+| Area | Change | Details |
+|------|--------|---------|
+| **Telemetry** | Removed PostHog, Scarf, and analytics tracking | Stripped from frontend core components; engine telemetry left intact to comply with Stirling PDF User License |
+| **Desktop hardening** | Stripped SaaS credentials and hardened config | Removed default SaaS URLs, disabled unused features via backend `-D` flags |
+| **UI cleanup** | Removed external links | Footer and UI links to external services removed for air-gapped deployment |
+| **Form field editing** | Added PDF form field creation/editing | New form field overlay with zh-TW i18n support |
+| **macOS build** | Unsigned build support | Ad-hoc signing identity for macOS builds without Apple Developer certificate |
+
+> **License note:** Files under `frontend/src/desktop/`, `frontend/src/proprietary/`, `frontend/src/saas/`, `app/proprietary/`, and `engine/` are governed by the [Stirling PDF User License](https://github.com/Stirling-Tools/Stirling-PDF/blob/main/app/proprietary/LICENSE) and have not been modified in this fork (or were reverted to upstream).
+
+---
 
 Stirling PDF is a powerful, open-source PDF editing platform. Run it as a personal desktop app, in the browser, or deploy it on your own servers with a private API. Edit, sign, redact, convert, and automate PDFs without sending documents to external services.
 
 <p align="center">
-  <a href="https://hub.docker.com/r/stirlingtools/stirling-pdf">
-    <img src="https://img.shields.io/docker/pulls/frooodle/s-pdf" alt="Docker Pulls">
-  </a>
-  <a href="https://discord.gg/HYmhKj45pU">
-    <img src="https://img.shields.io/discord/1068636748814483718?label=Discord" alt="Discord">
-  </a>
-  <a href="https://scorecard.dev/viewer/?uri=github.com/Stirling-Tools/Stirling-PDF">
-    <img src="https://api.scorecard.dev/projects/github.com/Stirling-Tools/Stirling-PDF/badge" alt="OpenSSF Scorecard">
-  </a>
   <a href="https://github.com/Stirling-Tools/stirling-pdf">
-    <img src="https://img.shields.io/github/stars/stirling-tools/stirling-pdf?style=social" alt="GitHub Repo stars">
+    <img src="https://img.shields.io/github/stars/stirling-tools/stirling-pdf?style=social" alt="Upstream GitHub Stars">
   </a>
 </p>
 
