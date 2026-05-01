@@ -277,11 +277,7 @@ export const useCookieConsent = ({
         document.head.removeChild(customCSS);
       }
     };
-  }, [
-    analyticsEnabled,
-    t,
-    forceLightMode,
-  ]);
+  }, [analyticsEnabled, t, forceLightMode]);
 
   useEffect(() => {
     if (!isInitialized) return;

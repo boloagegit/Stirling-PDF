@@ -5,7 +5,10 @@
  * all OTHER fields on the same page. If a candidate is within SNAP_THRESHOLD_PX
  * pixels of a target edge, it snaps to that edge.
  */
-import type { FormField, ModifyFieldDefinition } from "@app/tools/formFill/types";
+import type {
+  FormField,
+  ModifyFieldDefinition,
+} from "@app/tools/formFill/types";
 import { pdfToCssRect } from "@app/tools/formFill/formCoordinateUtils";
 
 const SNAP_THRESHOLD_PX = 6;
@@ -49,17 +52,30 @@ export function collectSnapTargets(
 
   for (const field of allFields) {
     if (field.name === excludeFieldName) continue;
-    const widgets = (field.widgets || []).filter(w => w.pageIndex === pageIndex);
+    const widgets = (field.widgets || []).filter(
+      (w) => w.pageIndex === pageIndex,
+    );
     if (widgets.length === 0) continue;
     const widget = widgets[0];
 
     const modified = modifiedFields.get(field.name);
     let left: number, top: number, width: number, height: number;
 
-    if (modified && modified.x != null && modified.y != null && modified.width != null && modified.height != null) {
+    if (
+      modified &&
+      modified.x != null &&
+      modified.y != null &&
+      modified.width != null &&
+      modified.height != null
+    ) {
       const css = pdfToCssRect(
-        { x: modified.x, y: modified.y, width: modified.width, height: modified.height },
-        pageHeightPts
+        {
+          x: modified.x,
+          y: modified.y,
+          width: modified.width,
+          height: modified.height,
+        },
+        pageHeightPts,
       );
       left = css.x * scaleX;
       top = css.y * scaleY;
@@ -90,7 +106,13 @@ export function collectSnapTargets(
  * add their pixel-space edges to the targets array.
  */
 export function collectPendingFieldSnapTargets(
-  pendingFields: { pageIndex: number; x: number; y: number; width: number; height: number }[],
+  pendingFields: {
+    pageIndex: number;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  }[],
   pageIndex: number,
   scaleX: number,
   scaleY: number,
@@ -123,7 +145,11 @@ export function collectPendingFieldSnapTargets(
 /**
  * Try to snap a single value to the nearest target within threshold.
  */
-export function applySnap(value: number, targets: number[], threshold = SNAP_THRESHOLD_PX): SnapResult {
+export function applySnap(
+  value: number,
+  targets: number[],
+  threshold = SNAP_THRESHOLD_PX,
+): SnapResult {
   let best = value;
   let bestDist = threshold + 1;
 
@@ -140,7 +166,10 @@ export function applySnap(value: number, targets: number[], threshold = SNAP_THR
     : { value, didSnap: false };
 }
 
-function collectEdgeTargets(targets: FieldEdges[]): { x: number[]; y: number[] } {
+function collectEdgeTargets(targets: FieldEdges[]): {
+  x: number[];
+  y: number[];
+} {
   const x: number[] = [];
   const y: number[] = [];
   for (const t of targets) {
@@ -175,10 +204,25 @@ export function snapRect(
   const sCx = applySnap(left + width / 2, xTargets, threshold);
 
   const xCandidates = [
-    { offset: sL.value - left, didSnap: sL.didSnap, dist: Math.abs(sL.value - left), pos: sL.value },
-    { offset: sR.value - (left + width), didSnap: sR.didSnap, dist: Math.abs(sR.value - (left + width)), pos: sR.value },
-    { offset: sCx.value - (left + width / 2), didSnap: sCx.didSnap, dist: Math.abs(sCx.value - (left + width / 2)), pos: sCx.value },
-  ].filter(c => c.didSnap);
+    {
+      offset: sL.value - left,
+      didSnap: sL.didSnap,
+      dist: Math.abs(sL.value - left),
+      pos: sL.value,
+    },
+    {
+      offset: sR.value - (left + width),
+      didSnap: sR.didSnap,
+      dist: Math.abs(sR.value - (left + width)),
+      pos: sR.value,
+    },
+    {
+      offset: sCx.value - (left + width / 2),
+      didSnap: sCx.didSnap,
+      dist: Math.abs(sCx.value - (left + width / 2)),
+      pos: sCx.value,
+    },
+  ].filter((c) => c.didSnap);
 
   let newLeft = left;
   if (xCandidates.length > 0) {
@@ -193,10 +237,25 @@ export function snapRect(
   const sCy = applySnap(top + height / 2, yTargets, threshold);
 
   const yCandidates = [
-    { offset: sT.value - top, didSnap: sT.didSnap, dist: Math.abs(sT.value - top), pos: sT.value },
-    { offset: sB.value - (top + height), didSnap: sB.didSnap, dist: Math.abs(sB.value - (top + height)), pos: sB.value },
-    { offset: sCy.value - (top + height / 2), didSnap: sCy.didSnap, dist: Math.abs(sCy.value - (top + height / 2)), pos: sCy.value },
-  ].filter(c => c.didSnap);
+    {
+      offset: sT.value - top,
+      didSnap: sT.didSnap,
+      dist: Math.abs(sT.value - top),
+      pos: sT.value,
+    },
+    {
+      offset: sB.value - (top + height),
+      didSnap: sB.didSnap,
+      dist: Math.abs(sB.value - (top + height)),
+      pos: sB.value,
+    },
+    {
+      offset: sCy.value - (top + height / 2),
+      didSnap: sCy.didSnap,
+      dist: Math.abs(sCy.value - (top + height / 2)),
+      pos: sCy.value,
+    },
+  ].filter((c) => c.didSnap);
 
   let newTop = top;
   if (yCandidates.length > 0) {
@@ -281,5 +340,11 @@ export function snapRectResize(
     }
   }
 
-  return { left: newLeft, top: newTop, width: newWidth, height: newHeight, guides };
+  return {
+    left: newLeft,
+    top: newTop,
+    width: newWidth,
+    height: newHeight,
+    guides,
+  };
 }

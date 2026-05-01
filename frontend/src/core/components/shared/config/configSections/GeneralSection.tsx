@@ -212,8 +212,8 @@ const GeneralSection: React.FC<GeneralSectionProps> = ({
         </Paper>
       )}
 
-      {/* Update Check Section */}
-      {!hideUpdateSection && config?.appVersion && (
+      {/* Update Check Section — hidden when login is disabled (desktop local-only mode) */}
+      {!hideUpdateSection && config?.enableLogin !== false && config?.appVersion && (
         <Paper withBorder p="md" radius="md">
           <Stack gap="md">
             <div>

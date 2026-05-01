@@ -43,10 +43,7 @@ export interface IFormDataProvider {
    * Add new form fields to a PDF.
    * Optional — only supported by backend providers.
    */
-  addFields?(
-    file: File | Blob,
-    fields: NewFieldDefinition[],
-  ): Promise<Blob>;
+  addFields?(file: File | Blob, fields: NewFieldDefinition[]): Promise<Blob>;
 
   /**
    * Modify existing form fields (properties and/or coordinates).

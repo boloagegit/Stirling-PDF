@@ -67,7 +67,6 @@ import styles from "@app/tools/formFill/FormFill.module.css";
 // Mode tabs — extensible for future form tools
 // ---------------------------------------------------------------------------
 
-
 interface ModeTabDef {
   id: FormMode;
   label: string;
@@ -143,7 +142,6 @@ const FormFill = (_props: BaseToolProps) => {
   const { validationErrors } = formState;
 
   const { scrollActions } = useViewer();
-
 
   const [flatten, setFlatten] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -410,10 +408,10 @@ const FormFill = (_props: BaseToolProps) => {
       </div>
 
       {/* ---- Create mode ---- */}
-      {mode === 'make' && <FormFieldCreatePanel />}
+      {mode === "make" && <FormFieldCreatePanel />}
 
       {/* ---- Modify mode ---- */}
-      {mode === 'modify' && <FormFieldModifyPanel />}
+      {mode === "modify" && <FormFieldModifyPanel />}
 
       {/* ---- Fill Form content ---- */}
       {mode === "fill" && (
@@ -594,7 +592,9 @@ const FormFill = (_props: BaseToolProps) => {
                       style={i === 0 ? { marginTop: 0 } : undefined}
                     >
                       <Text className={styles.pageDividerLabel}>
-                        {t("formFill.common.page", "Page {{page}}", { page: pageIdx + 1 })}
+                        {t("formFill.common.page", "Page {{page}}", {
+                          page: pageIdx + 1,
+                        })}
                       </Text>
                     </div>
 

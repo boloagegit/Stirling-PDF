@@ -13,6 +13,7 @@ import { useToolWorkflow } from "@app/contexts/ToolWorkflowContext";
 import { ToolId } from "@app/types/toolId";
 import { getSubcategoryLabel } from "@app/data/toolsTaxonomy";
 import { ToolPickerFooterExtensions } from "@app/components/tools/toolPicker/ToolPickerFooterExtensions";
+import { useAppConfig } from "@app/contexts/AppConfigContext";
 
 interface ToolPickerProps {
   selectedToolKey: string | null;
@@ -31,6 +32,7 @@ const ToolPicker = ({
   isSearching = false,
 }: ToolPickerProps) => {
   const { t } = useTranslation();
+  const { config } = useAppConfig();
 
   const scrollableRef = useRef<HTMLDivElement>(null);
 
@@ -187,7 +189,7 @@ const ToolPicker = ({
           </>
         )}
       </Box>
-      <ToolPickerFooterExtensions />
+      {config?.enableLogin !== false && <ToolPickerFooterExtensions />}
     </Box>
   );
 };

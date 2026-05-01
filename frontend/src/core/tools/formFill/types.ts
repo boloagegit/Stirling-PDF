@@ -75,8 +75,8 @@ export interface NewFieldDefinition {
   label?: string;
   type: FormFieldType;
   pageIndex: number;
-  x: number;       // PDF lower-left origin
-  y: number;       // PDF lower-left origin
+  x: number; // PDF lower-left origin
+  y: number; // PDF lower-left origin
   width: number;
   height: number;
   required?: boolean;
@@ -96,8 +96,8 @@ export interface ModifyFieldDefinition {
   label?: string;
   type?: string;
   pageIndex?: number;
-  x?: number;       // PDF lower-left origin
-  y?: number;       // PDF lower-left origin
+  x?: number; // PDF lower-left origin
+  y?: number; // PDF lower-left origin
   width?: number;
   height?: number;
   required?: boolean;
@@ -110,7 +110,7 @@ export interface ModifyFieldDefinition {
   multiline?: boolean;
 }
 
-export type FormMode = 'fill' | 'make' | 'batch' | 'modify';
+export type FormMode = "fill" | "make" | "batch" | "modify";
 
 /** Tracks the state of field creation (Create mode) */
 export interface FieldCreationState {
@@ -119,7 +119,13 @@ export interface FieldCreationState {
   /** The field type currently selected for placement (null = no placement active) */
   placingFieldType: FormFieldType | null;
   /** Rectangle being drawn (CSS coords, only non-null during drag) */
-  dragRect: { x: number; y: number; width: number; height: number; pageIndex: number } | null;
+  dragRect: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    pageIndex: number;
+  } | null;
 }
 
 /** Tracks the state of field editing (Modify mode) */
@@ -127,7 +133,7 @@ export interface FieldEditState {
   /** Name of the currently selected field */
   selectedFieldName: string | null;
   /** Interaction in progress */
-  interaction: 'idle' | 'moving' | 'resizing';
+  interaction: "idle" | "moving" | "resizing";
   /** The pending rectangle during drag (CSS coords) — null when idle */
   pendingRect: { x: number; y: number; width: number; height: number } | null;
 }

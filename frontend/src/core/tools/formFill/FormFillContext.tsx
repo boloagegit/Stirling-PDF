@@ -221,7 +221,9 @@ export interface FormFillContextValue {
   /** Creation state (pending fields, placing type, drag rect) */
   creationState: FieldCreationState;
   /** Set the field type being placed (null to cancel placement) */
-  setPlacingFieldType: (type: import('@app/tools/formFill/types').FormFieldType | null) => void;
+  setPlacingFieldType: (
+    type: import("@app/tools/formFill/types").FormFieldType | null,
+  ) => void;
   /** Add a pending field to the creation queue */
   addPendingField: (field: NewFieldDefinition) => void;
   /** Remove a pending field by index */
@@ -229,7 +231,7 @@ export interface FormFillContextValue {
   /** Update a pending field by index */
   updatePendingField: (index: number, field: NewFieldDefinition) => void;
   /** Set the drag rectangle during creation */
-  setCreationDragRect: (rect: FieldCreationState['dragRect']) => void;
+  setCreationDragRect: (rect: FieldCreationState["dragRect"]) => void;
   /** Commit all pending fields to the backend and refresh */
   commitNewFields: (file: File | Blob) => Promise<Blob>;
 
@@ -241,9 +243,15 @@ export interface FormFillContextValue {
   /** Pending field modifications keyed by field name (coordinates + properties) */
   modifiedFields: Map<string, Partial<ModifyFieldDefinition>>;
   /** Record a coordinate change for a field */
-  updateFieldCoordinates: (fieldName: string, coords: { x: number; y: number; width: number; height: number }) => void;
+  updateFieldCoordinates: (
+    fieldName: string,
+    coords: { x: number; y: number; width: number; height: number },
+  ) => void;
   /** Record a property change for a field (fontSize, readOnly, multiline, etc.) */
-  updateFieldProperties: (fieldName: string, props: Partial<ModifyFieldDefinition>) => void;
+  updateFieldProperties: (
+    fieldName: string,
+    props: Partial<ModifyFieldDefinition>,
+  ) => void;
   /** Commit all field modifications to the backend and refresh */
   commitFieldModifications: (file: File | Blob) => Promise<Blob>;
   /** Whether there are uncommitted changes in create or modify mode */
@@ -382,9 +390,7 @@ export function FormFillProvider({
   }, []);
 
   const setPlacingFieldType = useCallback(
-    (
-      type: import("@app/tools/formFill/types").FormFieldType | null,
-    ) => {
+    (type: import("@app/tools/formFill/types").FormFieldType | null) => {
       setCreationState((prev) => ({
         ...prev,
         placingFieldType: type,
@@ -435,7 +441,10 @@ export function FormFillProvider({
       if (!(provider as IFormDataProvider).addFields) {
         throw new Error("Current provider does not support adding fields");
       }
-      const blob = await (provider as IFormDataProvider).addFields!(file, creationState.pendingFields);
+      const blob = await (provider as IFormDataProvider).addFields!(
+        file,
+        creationState.pendingFields,
+      );
       // Clear pending fields after successful commit
       setCreationState((prev) => ({ ...prev, pendingFields: [] }));
       return blob;
@@ -496,7 +505,10 @@ export function FormFillProvider({
       if (updates.length === 0) {
         throw new Error("No field modifications to commit");
       }
-      const blob = await (provider as IFormDataProvider).modifyFields!(file, updates);
+      const blob = await (provider as IFormDataProvider).modifyFields!(
+        file,
+        updates,
+      );
       // Clear modifications after successful commit
       setModifiedFields(new Map());
       setEditStateRaw({

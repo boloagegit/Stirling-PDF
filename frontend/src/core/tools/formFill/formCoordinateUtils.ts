@@ -10,16 +10,16 @@
  */
 
 export interface CssRect {
-  x: number;      // left, in PDF points (CSS TL origin)
-  y: number;      // top, in PDF points (CSS TL origin)
-  width: number;  // PDF points
+  x: number; // left, in PDF points (CSS TL origin)
+  y: number; // top, in PDF points (CSS TL origin)
+  width: number; // PDF points
   height: number; // PDF points
 }
 
 export interface PdfRect {
-  x: number;      // lower-left X in PDF points (PDF BL origin)
-  y: number;      // lower-left Y in PDF points (PDF BL origin)
-  width: number;  // PDF points
+  x: number; // lower-left X in PDF points (PDF BL origin)
+  y: number; // lower-left Y in PDF points (PDF BL origin)
+  width: number; // PDF points
   height: number; // PDF points
 }
 

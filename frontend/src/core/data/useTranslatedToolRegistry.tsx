@@ -155,6 +155,28 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
       // Proprietary tools (if any)
       ...proprietaryTools,
       // Recommended Tools in order
+      formFill: {
+        icon: (
+          <LocalIcon
+            icon="text-fields-rounded"
+            width="1.5rem"
+            height="1.5rem"
+          />
+        ),
+        name: t("home.formFill.title", "Fill Form"),
+        component: FormFill,
+        description: t(
+          "home.formFill.desc",
+          "Fill PDF form fields interactively with a visual editor",
+        ),
+        categoryId: ToolCategoryId.RECOMMENDED_TOOLS,
+        subcategoryId: SubcategoryId.GENERAL,
+        workbench: "viewer" as const,
+        endpoints: ["form-fill"],
+        automationSettings: null,
+        supportsAutomate: false,
+        synonyms: ["form", "fill", "fillable", "input", "field", "acroform"],
+      },
       pdfTextEditor: {
         icon: (
           <LocalIcon
@@ -169,7 +191,7 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
           "home.pdfTextEditor.desc",
           "Review and edit text and images in PDFs with grouped text editing and PDF regeneration",
         ),
-        categoryId: ToolCategoryId.RECOMMENDED_TOOLS,
+        categoryId: ToolCategoryId.STANDARD_TOOLS,
         subcategoryId: SubcategoryId.GENERAL,
         maxFiles: 1,
         endpoints: ["text-editor-pdf"],
@@ -460,28 +482,6 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
         operationConfig: unlockPdfFormsOperationConfig,
         synonyms: getSynonyms(t, "unlockPDFForms"),
         automationSettings: null,
-      },
-      formFill: {
-        icon: (
-          <LocalIcon
-            icon="text-fields-rounded"
-            width="1.5rem"
-            height="1.5rem"
-          />
-        ),
-        name: t("home.formFill.title", "Fill Form"),
-        component: FormFill,
-        description: t(
-          "home.formFill.desc",
-          "Fill PDF form fields interactively with a visual editor",
-        ),
-        categoryId: ToolCategoryId.STANDARD_TOOLS,
-        subcategoryId: SubcategoryId.GENERAL,
-        workbench: "viewer" as const,
-        endpoints: ["form-fill"],
-        automationSettings: null,
-        supportsAutomate: false,
-        synonyms: ["form", "fill", "fillable", "input", "field", "acroform"],
       },
       changePermissions: {
         icon: <LocalIcon icon="lock-outline" width="1.5rem" height="1.5rem" />,
