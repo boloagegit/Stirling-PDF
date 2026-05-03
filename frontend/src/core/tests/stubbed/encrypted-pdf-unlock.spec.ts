@@ -175,8 +175,11 @@ test.describe("Encrypted PDF Unlock Modal", () => {
     ]);
 
     await expect(page.getByText(MODAL_TITLE)).toBeVisible({ timeout: 10000 });
+    // The "Use for all" button only appears once all encrypted files are
+    // detected. In WebKit the second file's encryption check can lag behind
+    // the modal render, so give it extra time.
     const unlockAllBtn = page.getByRole("button", { name: /Use for all/ });
-    await expect(unlockAllBtn).toBeVisible({ timeout: 10000 });
+    await expect(unlockAllBtn).toBeVisible({ timeout: 15000 });
 
     await page.getByPlaceholder(PASSWORD_PLACEHOLDER).fill("testpass123");
     await unlockAllBtn.click();
