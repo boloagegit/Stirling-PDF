@@ -418,7 +418,7 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
           "home.formFill.desc",
           "Fill PDF form fields interactively with a visual editor",
         ),
-        categoryId: ToolCategoryId.STANDARD_TOOLS,
+        categoryId: ToolCategoryId.RECOMMENDED_TOOLS,
         subcategoryId: SubcategoryId.GENERAL,
         workbench: "viewer" as const,
         endpoints: ["form-fill"],
