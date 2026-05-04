@@ -81,12 +81,11 @@ async function selectCertType(page: Page, label: string) {
 // ---------------------------------------------------------------------------
 async function uploadCertFile(page: Page, filePath: string) {
   // Mantine FileInput uses a visually hidden <input type="file">.
-  // We click the visible button to expose it, then set files via the hidden input.
-  const certFileInput = page.getByTestId("cert-file-input");
-  await certFileInput.click();
-  // After click, the file chooser or the hidden input becomes interactive.
-  // Use the first file input on the page (Mantine places it near the button).
+  // In Firefox, clicking the visible button opens the native file dialog which
+  // blocks the page, causing setInputFiles to time out. Instead, target the
+  // hidden input directly and set files without triggering the native dialog.
   const fileInput = page.locator('input[type="file"]').first();
+  await fileInput.waitFor({ state: "attached", timeout: 10000 });
   await fileInput.setInputFiles(filePath);
 }
 

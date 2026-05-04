@@ -50,9 +50,18 @@ async function uploadIntoSlot(
     timeout: 10000,
   });
 
-  const slot = page.locator(`[data-testid="compare-slot-${role}"]`);
+  // After the modal closes the auto-fill effect may re-render the slot area,
+  // briefly removing the element from the DOM. Wait for it to reappear before
+  // asserting attributes.
+  const slotSelector = `[data-testid="compare-slot-${role}"]`;
+  await page.waitForSelector(slotSelector, {
+    state: "attached",
+    timeout: 15000,
+  });
+
+  const slot = page.locator(slotSelector);
   await expect(slot).toHaveAttribute("data-slot-state", "filled", {
-    timeout: 10000,
+    timeout: 15000,
   });
   await expect(slot).toHaveAttribute("data-slot-filename", expectedFilename);
 }

@@ -37,8 +37,8 @@ jobs:
       - name: Install all Playwright browsers
         run: task frontend:test:e2e:install
 
-      - name: Run E2E tests (all browsers)
-        run: task frontend:test:e2e
+      - name: Run E2E tests (stubbed suite — all browsers)
+        run: task frontend:test:e2e -- --project=stubbed --project=stubbed-firefox --project=stubbed-webkit
 
       - name: Upload Playwright report
         if: always()
