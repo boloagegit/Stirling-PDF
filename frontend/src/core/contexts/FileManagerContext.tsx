@@ -662,11 +662,14 @@ export const FileManagerProvider: React.FC<FileManagerProviderProps> = ({
       if (files.length > 0) {
         try {
           // For local file uploads, pass File objects directly to FileContext
-          onNewFilesSelect(files);
+          // Await to ensure the upload (and modal close inside it) completes
+          await onNewFilesSelect(files);
           await refreshRecentFiles();
-          onClose();
         } catch (error) {
           console.error("Failed to process selected files:", error);
+        } finally {
+          // Always close the modal, even if upload or refresh fails
+          onClose();
         }
       }
       event.target.value = "";
