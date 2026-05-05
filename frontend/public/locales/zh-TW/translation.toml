@@ -4167,19 +4167,19 @@ modify = "修改"
 [formFill.createMode]
 title = "建立欄位"
 instruction = "選擇欄位類型，然後在 PDF 上拖曳以放置。"
-addButton = "新增 {count} 個欄位至 PDF"
+addButton = "新增 {{count}} 個欄位至 PDF"
 emptyState = "尚無待新增欄位。請先選擇上方的類型，然後在 PDF 上拖曳建立。"
 addFailed = "新增欄位失敗"
-newField = "新 {type}"
+newField = "新 {{type}}"
 
 [formFill.modifyMode]
 title = "修改欄位"
 instruction = "點擊下方列表或 PDF 上的欄位以選取。拖曳可移動，拖曳控制點可調整大小。"
-saveButton = "儲存 {count} 項變更"
+saveButton = "儲存 {{count}} 項變更"
 emptyState = "找不到表單欄位。請先使用「建立」模式新增欄位。"
 modifiedBadge = "已修改"
 loading = "載入欄位中..."
-unsavedChanges = "{count} 項未儲存的變更"
+unsavedChanges = "{{count}} 項未儲存的變更"
 saveFailed = "儲存修改失敗"
 
 [formFill.fieldTypes]
@@ -4209,14 +4209,14 @@ displayLabelPlaceholder = "顯示標籤"
 helpTextPlaceholder = "說明文字"
 defaultValuePlaceholder = "預設值"
 fontSizePlaceholder = "12（預設）"
-optionPlaceholder = "選項 {num}"
+optionPlaceholder = "選項 {{num}}"
 x = "X"
 y = "Y"
 width = "寬度"
 height = "高度"
 
 [formFill.common]
-page = "第 {page} 頁"
+page = "第 {{page}} 頁"
 
 [home.getPdfInfo]
 desc = "取得 PDF 的所有可能資訊"
