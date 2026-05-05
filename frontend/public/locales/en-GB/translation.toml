@@ -4076,19 +4076,19 @@ modify = "Modify"
 [formFill.createMode]
 title = "Create Fields"
 instruction = "Select a field type, then drag on the PDF to place it."
-addButton = "Add {count} Field(s) to PDF"
+addButton = "Add {{count}} Field(s) to PDF"
 emptyState = "No pending fields. Select a type above and drag on the PDF to create one."
 addFailed = "Failed to add fields"
-newField = "New {type}"
+newField = "New {{type}}"
 
 [formFill.modifyMode]
 title = "Modify Fields"
 instruction = "Click a field below or on the PDF to select it. Drag to move, use handles to resize."
-saveButton = "Save {count} Change(s)"
+saveButton = "Save {{count}} Change(s)"
 emptyState = "No form fields found. Use Create mode to add fields first."
 modifiedBadge = "modified"
 loading = "Loading fields..."
-unsavedChanges = "{count} unsaved change(s)"
+unsavedChanges = "{{count}} unsaved change(s)"
 saveFailed = "Failed to save modifications"
 
 [formFill.fieldTypes]
@@ -4118,14 +4118,14 @@ displayLabelPlaceholder = "Display label"
 helpTextPlaceholder = "Help text"
 defaultValuePlaceholder = "Default value"
 fontSizePlaceholder = "12 (default)"
-optionPlaceholder = "Option {num}"
+optionPlaceholder = "Option {{num}}"
 x = "X"
 y = "Y"
 width = "Width"
 height = "Height"
 
 [formFill.common]
-page = "Page {page}"
+page = "Page {{page}}"
 
 [home.autoRename]
 desc = "Auto renames a PDF file based on its detected header"

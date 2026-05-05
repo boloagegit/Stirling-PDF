@@ -71,7 +71,7 @@ const FileManager: React.FC<FileManagerProps> = ({ selectedTool }) => {
       if (files.length > 0) {
         try {
           // Files will get IDs assigned through onFilesSelect -> FileContext addFiles
-          onFileUpload(files);
+          await onFileUpload(files);
           await refreshRecentFiles();
         } catch (error) {
           console.error("Failed to process dropped files:", error);
